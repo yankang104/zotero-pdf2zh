@@ -109,6 +109,17 @@ pdf2zh_next_service_aliases = {
     "azure-openai": "azureopenai",
 }
 
+# pdf2zh_next engines that need no entry in pdf2zh_next_config_map.
+pdf2zh_next_keyless_services = {"bing", "google", "argos", "clitranslator"}
+
+# Engine used for user-named custom services (see Config.custom_service).
+pdf2zh_next_custom_service_engine = "openaicompatible"
+
+
+def is_known_pdf2zh_next_service(service):
+    name = pdf2zh_next_service_aliases.get(service, service)
+    return name in pdf2zh_next_config_map or name in pdf2zh_next_keyless_services
+
 pdf2zh_next_config_map = {
     "deepl": {
         apiKey: "deepl_auth_key"
@@ -251,6 +262,9 @@ pdf2zh_next_config_map = {
             "openai_compatible_send_temperature",
             "openai_compatible_send_reasoning_effort",
             "openai_compatible_enable_json_mode",
+            # zotero_api_format / zotero_extra_headers / zotero_extra_body are
+            # also accepted here, but utils.relay_patch consumes them before
+            # config.toml is written: upstream has no such settings.
         ]
     },
     "claudecode": {

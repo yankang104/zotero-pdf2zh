@@ -19,6 +19,7 @@ from utils.environment_lifecycle import (
 )
 from utils.config import Config, clear_saved_credential
 from utils.config_map import pdf2zh_next_service_aliases
+from utils.relay_patch import RELAY_PATCH_FLAG, write_relay_options
 from utils.config_migration import prepare_config_files
 from utils.cropper import Cropper
 import traceback
@@ -240,6 +241,7 @@ class PDFTranslator:
             'tableModes': list(TABLE_MODES),
             'referenceSkip': True,  # Protocol support; engine version checked per job.
             'deepseekFlashThinkingPatch': True,  # Runtime validated per job.
+            'relayPatch': True,  # Custom headers / responses / messages formats.
         }), 200
 
     ##################################################################
@@ -481,7 +483,7 @@ class PDFTranslator:
             'finished': False,
             'fileName': os.path.basename(input_path),
             'engine': engine,
-            'service': config.service,
+            'service': getattr(config, 'custom_service', None) or config.service,
             'modelName': model_name,
             'startTime': start_time.isoformat(),
             'progress': 0,
@@ -1309,6 +1311,18 @@ class PDFTranslator:
             cmd.append('--translate-table-text')
         if config.table_mode is not None:
             cmd.extend(['--zotero-table-mode', config.table_mode])
+        if config.relay_options:
+            if args.enable_winexe and os.path.exists(args.winexe_path):
+                raise ValueError(
+                    '自定义请求头 / 接口类型需要 Python 引擎，Windows 独立 EXE 无法加载。'
+                    '请关闭 --enable_winexe 后重试；本次没有发起 API 请求。'
+                )
+            relay_file = os.path.join(
+                os.path.dirname(os.path.abspath(config_path[pdf2zh_next])),
+                'relay_options.json',
+            )
+            write_relay_options(relay_file, config.relay_options)
+            cmd.extend([RELAY_PATCH_FLAG, relay_file])
         if config.skip_references:
             if args.enable_winexe and os.path.exists(args.winexe_path):
                 print('⚠️ 参考文献跳过需要 Python 引擎；Windows 独立 EXE 本次使用原生翻译。')

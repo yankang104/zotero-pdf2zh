@@ -13,6 +13,7 @@ from utils.table_runtime import (
 )
 from utils.table_mode import parse_table_mode
 from utils.deepseek_flash_patch import install_deepseek_flash_patch
+from utils.relay_patch import install_relay_patch
 from utils.reference_skip import (
     install_reference_skip_policy,
     policy_supported as reference_policy_supported,
@@ -23,13 +24,17 @@ _native_worker = None
 _parent_restore = None
 
 
-def _install_policies(mode, reference_skip, flash_patch=False):
+def _install_policies(mode, reference_skip, flash_patch=False, relay_patch=None):
     restores = []
     try:
         # This must run in the child too: DeepSeekSettings.transform() executes
         # in create_babeldoc_config() inside pdf2zh_next's translation worker.
         if flash_patch:
             restores.append(install_deepseek_flash_patch())
+        # Same for the relay hook: the translator object that sends the HTTP
+        # requests is constructed inside the translation worker.
+        if relay_patch:
+            restores.append(install_relay_patch(relay_patch))
         # Table process_page wraps the reference filter, not vice versa.
         if reference_skip:
             restores.append(install_reference_skip_policy())
@@ -48,21 +53,24 @@ def _install_policies(mode, reference_skip, flash_patch=False):
 
 
 def _run_table_worker(
-    mode, *args, reference_skip=False, flash_patch=False, **kwargs
+    mode, *args, reference_skip=False, flash_patch=False, relay_patch=None,
+    **kwargs
 ):
     from pdf2zh_next import high_level
 
     native = _native_worker or high_level._translate_wrapper
     if _parent_restore is not None:
         _parent_restore()
-    restore = _install_policies(mode, reference_skip, flash_patch)
+    restore = _install_policies(mode, reference_skip, flash_patch, relay_patch)
     try:
         return native(*args, **kwargs)
     finally:
         restore()
 
 
-def install_table_process_policy(mode, reference_skip=False, flash_patch=False):
+def install_table_process_policy(
+    mode, reference_skip=False, flash_patch=False, relay_patch=None
+):
     parse_table_mode(mode)
     if mode and not table_policy_supported():
         warn_native_table_fallback()
@@ -70,7 +78,7 @@ def install_table_process_policy(mode, reference_skip=False, flash_patch=False):
     if reference_skip and not reference_policy_supported():
         warn_reference_fallback()
         reference_skip = False
-    if not mode and not reference_skip and not flash_patch:
+    if not mode and not reference_skip and not flash_patch and not relay_patch:
         return lambda: None
 
     from pdf2zh_next import high_level
@@ -78,12 +86,14 @@ def install_table_process_policy(mode, reference_skip=False, flash_patch=False):
     global _native_worker, _parent_restore
     if _native_worker is not None:
         raise RuntimeError("BabelDOC process policy is already installed")
-    restore_policy = _install_policies(mode, reference_skip, flash_patch)
+    restore_policy = _install_policies(mode, reference_skip, flash_patch, relay_patch)
     native = high_level._translate_wrapper
     _native_worker, _parent_restore = native, restore_policy
+    worker_options = {"reference_skip": reference_skip, "flash_patch": flash_patch}
+    if relay_patch:
+        worker_options["relay_patch"] = relay_patch
     high_level._translate_wrapper = partial(
-        _run_table_worker, mode,
-        reference_skip=reference_skip, flash_patch=flash_patch,
+        _run_table_worker, mode, **worker_options
     )
 
     def restore():

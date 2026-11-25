@@ -138,6 +138,26 @@ uv run pdf2zh_next input.pdf \
 - openai_compatible_send_reasoning_effort
 - openai_compatible_enable_json_mode（默认关闭）
 
+**自定义中转字段（本仓库扩展，上游没有）**
+
+由 `server/utils/relay_patch.py` 处理：Server 在写 `config.toml` 之前把这三项取走，写入 `config/relay_options.json`，再由引擎子进程在内存里给上游的 `OpenAITranslator` 打补丁，不修改已安装的包文件。需要 Python 引擎，`--enable_winexe` 模式下会直接报错。
+
+- zotero_api_format: 接口类型，`chat`（默认，`/chat/completions`）/ `responses`（`/v1/responses`）/ `messages`（Anthropic `/v1/messages`）
+- zotero_extra_headers: 自定义请求头，JSON 对象，例如 `{"User-Agent": "my-client/1.0"}`；值写 `null` 表示不发送该默认请求头
+- zotero_extra_body: 额外请求体字段，JSON 对象，例如 `{"stream": true}`（`stream` 只在 responses / messages 下可用）
+
+Base URL 的拼接规则：
+
+- `responses`：`<Base URL>/responses`，所以 Base URL 一般以 `/v1` 结尾
+- `messages`：Base URL 以 `/v1` 结尾时拼 `/messages`，否则拼 `/v1/messages`
+- Base URL 已经以 `/responses` 或 `/messages` 结尾时原样使用
+
+鉴权请求头：`chat` 和 `responses` 发 `Authorization: Bearer <key>`；`messages` 发 `x-api-key: <key>` 和 `anthropic-version: 2023-06-01`。都可以用 zotero_extra_headers 覆盖或移除。`messages` 的 `max_tokens` 默认 8192，可用 zotero_extra_body 修改。
+
+## 自定义服务名
+
+pdf2zh_next 引擎下，服务名不是内置服务、且插件里有一条同名并填写了 Base URL 的激活配置时，Server 把它当作自定义服务，用 `openaicompatible` 引擎执行。名字只用于在插件里区分多条配置；可用字段与 openailiked 相同（`openai_compatible_*` 和上面三个 `zotero_*`）。
+
 ## AliyunDashScope
 
 **基础字段**

@@ -782,8 +782,52 @@ href="chrome://zotero/skin/zotero.css" type="text/css"?>
                         zh: "JSON 模式（默认关闭）",
                         en: "JSON mode (off by default)",
                     },
+                    // 以下三项由 Server 的 utils/relay_patch.py 处理(需 Python 引擎)。
+                    {
+                        key: "zotero_api_format",
+                        type: "enum",
+                        values: ["chat", "responses", "messages"],
+                        zh: "接口类型：chat=/chat/completions，responses=/v1/responses，messages=/v1/messages",
+                        en: "API format: chat=/chat/completions, responses=/v1/responses, messages=/v1/messages",
+                    },
+                    {
+                        key: "zotero_extra_headers",
+                        type: "string",
+                        zh: '自定义请求头（JSON，如 {"User-Agent":"xxx"}；值为 null 表示不发送该头）',
+                        en: 'Custom request headers (JSON, e.g. {"User-Agent":"xxx"}; null removes a header)',
+                    },
+                    {
+                        key: "zotero_extra_body",
+                        type: "string",
+                        zh: '额外请求体字段（JSON，如 {"stream":true}）',
+                        en: 'Extra request body fields (JSON, e.g. {"stream":true})',
+                    },
                 ],
             };
+            // 与 server/utils/config_map.py 的 is_known_pdf2zh_next_service 保持一致。
+            // 不在这些名字里的服务名视为"自定义服务", Server 用 OpenAI 兼容引擎执行。
+            const PDF2ZH_NEXT_BUILTIN_SERVICES = [
+                "bing",
+                "google",
+                "argos",
+                "clitranslator",
+                "deepl",
+                "xinference",
+                "tencentmechinetranslation",
+                "azure",
+                "anythingllm",
+                "dify",
+                "claudecode",
+            ];
+            function isCustomRelayService(serviceKey) {
+                const key = String(serviceKey || "").trim();
+                if (key.length < 3) return false;
+                const canonical = PDF2ZH_NEXT_SERVICE_ALIASES[key] || key;
+                return (
+                    !PDF2ZH_NEXT_EXTRA_FIELDS[canonical] &&
+                    !PDF2ZH_NEXT_BUILTIN_SERVICES.includes(canonical)
+                );
+            }
             var Services, Zotero;
 
             const UI_TEXT = {
@@ -1178,6 +1222,9 @@ href="chrome://zotero/skin/zotero.css" type="text/css"?>
             function getSupportedExtraFields(serviceKey) {
                 const canonical =
                     PDF2ZH_NEXT_SERVICE_ALIASES[serviceKey] || serviceKey;
+                if (isCustomRelayService(serviceKey)) {
+                    return PDF2ZH_NEXT_EXTRA_FIELDS.openaicompatible;
+                }
                 return PDF2ZH_NEXT_EXTRA_FIELDS[canonical] || [];
             }
 

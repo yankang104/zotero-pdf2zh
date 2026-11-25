@@ -18,6 +18,7 @@ def main():
     )
     from utils.reference_skip import policy_supported, warn_native_fallback
     from utils.deepseek_thinking import FLASH_PATCH_FLAG
+    from utils.relay_patch import RELAY_PATCH_FLAG
 
     mode = sys.argv.pop(1)
     mode = None if mode == "none" else parse_table_mode(mode)
@@ -27,6 +28,10 @@ def main():
     flash_patch = len(sys.argv) > 1 and sys.argv[1] == FLASH_PATCH_FLAG
     if flash_patch:
         sys.argv.pop(1)
+    relay_patch = None
+    if len(sys.argv) > 2 and sys.argv[1] == RELAY_PATCH_FLAG:
+        sys.argv.pop(1)
+        relay_patch = sys.argv.pop(1)
     if mode and not table_policy_supported():
         warn_native_table_fallback()
         # Restore native table OCR for an unverified upstream version.
@@ -40,10 +45,11 @@ def main():
     try:
         # The parent handles debug/in-process translation. The composed
         # process policy also reinstalls hooks in fork/spawn child workers.
-        if mode or reference_skip or flash_patch:
+        if mode or reference_skip or flash_patch or relay_patch:
             restores.append(
                 install_table_process_policy(
-                    mode, reference_skip=reference_skip, flash_patch=flash_patch
+                    mode, reference_skip=reference_skip, flash_patch=flash_patch,
+                    **({"relay_patch": relay_patch} if relay_patch else {}),
                 )
             )
         entry = next(

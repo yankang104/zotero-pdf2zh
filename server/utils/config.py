@@ -6,10 +6,13 @@ import os
 from utils.table_mode import parse_table_mode, validate_table_runtime
 
 from utils.config_map import (
+    is_known_pdf2zh_next_service,
     pdf2zh_config_map,
     pdf2zh_next_config_map,
+    pdf2zh_next_custom_service_engine,
     pdf2zh_next_service_aliases,
 )
+from utils.relay_patch import describe_relay_options, normalize_relay_options
 from utils.openai_reasoning import validate_openai_none
 from utils.deepseek_thinking import (
     is_deepseek_thinking_model,
@@ -292,6 +295,25 @@ class Config:
         # 面向用户的提示（会随任务信息返回给插件展示）
         self.warnings = []
 
+        # 自定义中转: 请求头 / 额外 body / 接口类型, 由 update_config_file 解析。
+        self.relay_options = None
+        # 用户自己起名的服务(例如 "my-relay"): pdf2zh_next 不认识这个名字,
+        # 实际交给 OpenAI 兼容引擎执行, 名字只用于在插件里区分多条配置。
+        self.custom_service = None
+        if self.engine == pdf2zh_next and not is_known_pdf2zh_next_service(self.service):
+            request_llm_api = request_data.get('llm_api') or {}
+            if (
+                isinstance(request_llm_api, dict)
+                and request_llm_api.get('service') == self.service
+                and str(self.llm_api.get('apiUrl') or '').strip()
+            ):
+                self.custom_service = self.service
+                self.service = pdf2zh_next_custom_service_engine
+                print(
+                    f"🔀 自定义服务 '{self.custom_service}' 将使用 "
+                    f"{pdf2zh_next_custom_service_engine} 引擎执行"
+                )
+
     def detect_saved_credential_reuse(self, config_file):
         """插件没有下发 API Key、但磁盘上仍保存着该服务的 Key 时给出警告。
 
@@ -445,6 +467,19 @@ class Config:
 
             if service == 'openai':
                 validate_openai_none(self.llm_api, old_config)
+
+            # Relay-only fields never reach config.toml: upstream settings
+            # models do not know them. They travel in a side file instead.
+            self.relay_options = None
+            if service == pdf2zh_next_custom_service_engine:
+                self.relay_options = normalize_relay_options(
+                    self.llm_api.get('extraData')
+                )
+                if self.relay_options:
+                    print(
+                        "🔀 [自定义中转] "
+                        + describe_relay_options(self.relay_options)
+                    )
 
             # A previous DeepSeek V4 attempt may have written 2.9-only fields.
             # For every non-DeepSeek request, scrub those fields before an older

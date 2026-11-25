@@ -11,6 +11,7 @@ import shutil
 from pathlib import Path
 
 from utils.deepseek_thinking import FLASH_PATCH_FLAG
+from utils.relay_patch import RELAY_PATCH_FLAG
 from statistics import median
 
 from utils.table_batching import process_page_in_table_batches
@@ -81,6 +82,7 @@ def prepare_table_runtime_command(command):
         FLAG not in command
         and REFERENCE_FLAG not in command
         and FLASH_PATCH_FLAG not in command
+        and RELAY_PATCH_FLAG not in command
     ):
         return command
     args = list(command)
@@ -90,6 +92,13 @@ def prepare_table_runtime_command(command):
     flash_patch = FLASH_PATCH_FLAG in args
     if flash_patch:
         args.remove(FLASH_PATCH_FLAG)
+    relay_patch = None
+    if RELAY_PATCH_FLAG in args:
+        index = args.index(RELAY_PATCH_FLAG)
+        if index + 1 >= len(args):
+            raise ValueError("Missing relay options file")
+        relay_patch = args[index + 1]
+        del args[index : index + 2]
     mode = None
     if FLAG in args:
         index = args.index(FLAG)
@@ -97,7 +106,7 @@ def prepare_table_runtime_command(command):
             raise ValueError("Missing table mode")
         mode = parse_table_mode(args[index + 1])
         del args[index : index + 2]
-    if not mode and not reference_skip and not flash_patch:
+    if not mode and not reference_skip and not flash_patch and not relay_patch:
         return args
     if not args:
         raise ValueError("Missing engine command")
@@ -130,6 +139,7 @@ def prepare_table_runtime_command(command):
         str(python), "-u", str(runner), mode or "none",
         *([REFERENCE_FLAG] if reference_skip else []),
         *([FLASH_PATCH_FLAG] if flash_patch else []),
+        *([RELAY_PATCH_FLAG, relay_patch] if relay_patch else []),
         *engine_args,
     ]
 
