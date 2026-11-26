@@ -369,24 +369,13 @@ python server.py --env_tool=conda
 
 ## 第六步： 关于翻译选项
 
-在Zotero中对条目/PDF右键，选择PDF2zh-翻译选项，进行翻译。
+在 Zotero 中右键原文 PDF 或论文条目，从「PDF2zh」子菜单直接选择一种翻译格式：
 
-对条目/附件单击右键, 可以看到四个翻译选项:
+- `PDF2zh ▶ 仅译文`：生成单语译文 PDF。
+- `PDF2zh ▶ 双语对照（左右并排）`：生成左右并排的双语 PDF，附件以 `LR` 区分。
+- `PDF2zh ▶ 双语对照（交替页）`：生成交替页排列的双语 PDF，附件以 `TB` 区分。
 
-<div align=center>
-<img src="./images/menu.png" width="400"/>
-</div>
-
-**💡 翻译选项解析**
-
-| 翻译选项                              | 解释                                                         | 示例图片                                                     |
-| ------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **翻译PDF (translate PDF)**           | 点击原文PDF或论文条目, 将会生成在Zotero插件设置端所选择的默认生成文件 | <img src="./images/image3.png" alt="image3" style="width: 400px" align="center"/> |
-| **裁剪PDF (crop PDF)**                | 选择dual/mono类型附件, 将会对选择的附件在宽度1/2处裁剪, 然后上下拼接, 此功能适合手机阅读<br />注意事项: <br />1. 本选项会将页面两侧空白处进行裁剪<br />2. 若产生截断了原文内容的情况, 可将`server/utils/config.py`中的`config.pdf_w_offset`值降低 | <img src="./images/image4-1.png" alt="image4" style="width: 400px" align="center"/> |
-| **双语对照 (compare PDF)**                | 点击此选项, 会生成左边为原文, 右边为翻译后文本的PDF<br />1. 选择"Dual文件翻译页在前"可以交换生成顺序<br />2. 此选项等同于翻译引擎为pdf2zh_next, 且`双语(Dual)文件显示模式`为**Left&Right**时生成的文件 | <img src="./images/image4-3.png" alt="image4" style="width: 400px" align="center"/> |
-| **双语对照(裁剪) (crop-compare PDF)** | 此选项仅针对**双栏PDF论文**。它会先将PDF**竖向裁剪为单栏文件**，再左右拼接。 | <img src="./images/image4-2.png" alt="image4" style="width: 400px" align="center"/> |
-
-**您可以多选条目，右键菜单，然后进行批量PDF翻译**
+点击菜单项会直接提交单一格式，不显示复选框、选择弹窗或开始按钮。所选布局仅对本次任务生效，不修改已保存的默认生成设置；当前引擎不支持的版式显示为不可用。可多选条目后右键批量翻译。
 
 ## 第七步: 关于包更新
 

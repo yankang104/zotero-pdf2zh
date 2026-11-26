@@ -24,6 +24,12 @@ import {
 } from "./pdf2zhTypes";
 import { loadLLMApisFromPrefs } from "./preferenceScript";
 import { translationConfig, wenyiModelOptions } from "./wenyiConfig";
+import {
+    supportsTranslationMode,
+    translationOutputSettings,
+    type TranslationMode,
+    type TranslationOutput,
+} from "./pdf2zhTranslationOutputs";
 
 export class PDF2zhHelperFactory {
     // 翻译请求本身不要重试，避免同一篇 PDF 被重复翻译。
@@ -42,6 +48,7 @@ export class PDF2zhHelperFactory {
     // **** 由hooks.ts调用, main entries *****
     static async processWorker(
         endpoint: string, // 仅包含请求类型
+        mode?: TranslationMode,
     ) {
         const pane = ztoolkit.getGlobal("ZoteroPane");
         const selectedItems = pane.getSelectedItems();
@@ -56,6 +63,7 @@ export class PDF2zhHelperFactory {
             item: Zotero.Item;
             config: ServerConfig;
             endpoint: string;
+            outputs?: readonly TranslationOutput[];
         }> = [];
         for (const item of selectedItems) {
             try {
@@ -69,12 +77,26 @@ export class PDF2zhHelperFactory {
                 if (operationError) {
                     throw new Error(operationError);
                 }
-                const config = this.getServerConfig();
+                const config = this.getServerConfig(mode);
+                if (mode) {
+                    if (!supportsTranslationMode(mode, config)) {
+                        throw new Error(
+                            getString(
+                                "operation-error-translation-mode-unsupported",
+                            ),
+                        );
+                    }
+                    Object.assign(config, translationOutputSettings(mode));
+                }
+                const outputs: readonly TranslationOutput[] | undefined = mode
+                    ? [mode === "mono" ? "mono" : "dual"]
+                    : undefined;
                 tasks.push({
                     fileName,
                     item,
                     config,
                     endpoint,
+                    outputs,
                 });
             } catch (error) {
                 const message =
@@ -253,6 +275,7 @@ export class PDF2zhHelperFactory {
             item: Zotero.Item; // item
             config: ServerConfig; // serverConfig
             endpoint: string; // 请求类型
+            outputs?: readonly TranslationOutput[];
         },
         onProgress?: (
             update: Omit<JobProgressUpdate, "current" | "total">,
@@ -277,7 +300,7 @@ export class PDF2zhHelperFactory {
                 onProgress,
             );
             onProgress?.({ phase: "importing", fileName, endpoint });
-            await this.handleResponse(response, item, config);
+            await this.handleResponse(response, item, config, params.outputs);
             onProgress?.({ phase: "file-done", fileName, endpoint });
         } catch (error) {
             ztoolkit.log(`处理单个文件失败: ${fileName}, 错误: ${error}`);
@@ -755,6 +778,7 @@ export class PDF2zhHelperFactory {
         response: any,
         item: Zotero.Item,
         config: ServerConfig,
+        outputs?: readonly TranslationOutput[],
     ) {
         ztoolkit.log("response", response);
         if (response.status === "accepted") {
@@ -776,10 +800,15 @@ export class PDF2zhHelperFactory {
             : [];
         const errors: Error[] = [];
         let attached = 0;
+        let requested = 0;
         const attachKeys = new Set<string>();
         for (let i = 0; i < fileList.length; i++) {
             const fileName = fileList[i];
             const fileType = this.getFileType(fileName);
+            if (outputs && !outputs.includes(fileType as TranslationOutput)) {
+                continue;
+            }
+            requested++;
             const options = this.getPDFOptions(fileType);
             try {
                 await this.fetchAndAttachPDF({
@@ -806,7 +835,7 @@ export class PDF2zhHelperFactory {
                 getString("operation-error-partial-attachments", {
                     args: {
                         attached,
-                        total: fileList.length,
+                        total: requested,
                         message: errors
                             .map((error) => error.message)
                             .join("; "),
@@ -991,6 +1020,7 @@ export class PDF2zhHelperFactory {
                 options,
                 type,
                 service,
+                dualMode: config.dualMode,
                 attachKeys,
             });
             if (attached) {
@@ -1037,6 +1067,7 @@ export class PDF2zhHelperFactory {
                             options,
                             type,
                             service,
+                            dualMode: config.dualMode,
                             attachKeys: params.attachKeys,
                         });
                         if (!attached) {
@@ -1098,6 +1129,7 @@ export class PDF2zhHelperFactory {
         options: PDFOperationOptions; // PDF(rename, open)
         type: string; // PDF处理类型(用于短标题)
         service: string; // 服务(用于短标题)
+        dualMode?: string;
         attachKeys: Set<string>;
     }): Promise<boolean> {
         const { item, filePath, fileName, options, type, service, attachKeys } =
@@ -1118,6 +1150,7 @@ export class PDF2zhHelperFactory {
             date: targetItem.getField("date") || "",
             service,
             type,
+            dualMode: type === PDFType.DUAL ? params.dualMode : undefined,
             style: getPref("renameStyle")?.toString() || "shortTitle",
             prefixLength: Number(getPref("renamePrefixLength")) || 20,
             template: getPref("renameTemplate")?.toString() || "",
@@ -1161,7 +1194,7 @@ export class PDF2zhHelperFactory {
     }
 
     // ************* Config *************
-    static getServerConfig(): ServerConfig {
+    static getServerConfig(mode?: TranslationMode): ServerConfig {
         const config: ServerConfig = {
             serverUrl: getPref("new_serverip")?.toString() || "",
 
@@ -1217,7 +1250,13 @@ export class PDF2zhHelperFactory {
             onlyIncludeTranslatedPage:
                 getPref("onlyIncludeTranslatedPage")?.toString() || "",
         };
-        return translationConfig(config, getPref);
+        return translationConfig(
+            config,
+            getPref,
+            mode
+                ? { mono: mode === "mono", bilingual: mode !== "mono" }
+                : undefined,
+        );
     }
 
     static getActiveLLMApiConfig(service: string): any {

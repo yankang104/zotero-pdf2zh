@@ -1,5 +1,10 @@
 import { MenuitemOptions } from "zotero-plugin-toolkit";
 import { getString } from "../utils/locale";
+import { getPref } from "../utils/prefs";
+import {
+    supportsTranslationMode,
+    type TranslationMode,
+} from "./pdf2zhTranslationOutputs";
 
 export class PDF2zhBasicFactory {
     static registerPrefs() {
@@ -28,26 +33,29 @@ export class PDF2zhUIFactory {
         }
         if (win.document.querySelector("#zotero-itemmenu-pdf2zh")) return;
         const menuIcon = `chrome://${addon.data.config.addonRef}/content/icons/favicon@0.5x.svg`;
-        const MENU_ITEMS = [
+        const MENU_ITEMS: Array<{
+            id: string;
+            label: string;
+            command: string;
+            mode: TranslationMode;
+        }> = [
             {
-                id: "translate-pdf",
-                label: getString("prefs-menu-translate"),
-                command: "translatePDF",
+                id: "translate-mono-pdf",
+                label: getString("prefs-menu-translate-mono"),
+                command: "translateMonoPDF",
+                mode: "mono",
             },
             {
-                id: "crop-pdf",
-                label: getString("prefs-menu-cut"),
-                command: "cropPDF",
+                id: "translate-dual-lr-pdf",
+                label: getString("prefs-menu-translate-dual-lr"),
+                command: "translateDualLRPDF",
+                mode: "dual-lr",
             },
             {
-                id: "compare-pdf",
-                label: getString("prefs-menu-compare"),
-                command: "comparePDF",
-            },
-            {
-                id: "crop-compare-pdf",
-                label: getString("prefs-menu-crop-compare"),
-                command: "crop-comparePDF",
+                id: "translate-dual-tb-pdf",
+                label: getString("prefs-menu-translate-dual-tb"),
+                command: "translateDualTBPDF",
+                mode: "dual-tb",
             },
         ];
         const pdf2zhMenu: MenuitemOptions = {
@@ -58,15 +66,33 @@ export class PDF2zhUIFactory {
             children: MENU_ITEMS.map(({ id, label, command }) => ({
                 tag: "menuitem",
                 id: `zotero-itemmenu-${id}`,
-                label: `PDF2zh: ${label}`,
+                label,
                 commandListener: () => addon.hooks.onDialogEvents(command),
             })),
         };
         ztoolkit.Menu.register(popup, pdf2zhMenu);
-        patchMenuCompat(
-            win.document.querySelector("#zotero-itemmenu-pdf2zh"),
-            menuIcon,
-        );
+        const menuRoot = win.document.querySelector<XUL.Menu>(
+            "#zotero-itemmenu-pdf2zh",
+        )!;
+        patchMenuCompat(menuRoot, menuIcon);
+        const refreshMenuItems = () => {
+            const config = {
+                engine: getPref("engine")?.toString() || "",
+                babeldoc: getPref("babeldoc")?.toString() || "",
+            };
+            for (const { id, mode } of MENU_ITEMS) {
+                const menuItem = menuRoot.querySelector<XUL.MenuItem>(
+                    `#zotero-itemmenu-${id}`,
+                )!;
+                if (supportsTranslationMode(mode, config)) {
+                    menuItem.removeAttribute("disabled");
+                } else {
+                    menuItem.setAttribute("disabled", "true");
+                }
+            }
+        };
+        menuRoot.addEventListener("popupshowing", refreshMenuItems);
+        refreshMenuItems();
     }
 }
 

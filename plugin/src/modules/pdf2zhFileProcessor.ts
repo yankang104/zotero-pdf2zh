@@ -1,5 +1,6 @@
 import { PDF2zhHelperFactory } from "./pdf2zhHelper";
 import { JobProgressUpdate, ServerConfig } from "./pdf2zhTypes";
+import type { TranslationOutput } from "./pdf2zhTranslationOutputs";
 
 export class FileProcessor {
     private static instance: FileProcessor;
@@ -37,6 +38,7 @@ export class FileProcessor {
             item: Zotero.Item;
             config: ServerConfig;
             endpoint: string;
+            outputs?: readonly TranslationOutput[];
         }>,
         onProgress?: (update: JobProgressUpdate) => void,
     ): Promise<{ total: number; succeeded: number; failed: number }> {

@@ -57,6 +57,26 @@ test("shortTitle style keeps the historical output byte-for-byte", () => {
     );
 });
 
+test("dual mode distinguishes built-in titles while other types stay unchanged", () => {
+    assert.equal(
+        buildAttachmentTitle(baseInput({ type: "dual", dualMode: "LR" })),
+        "LLM Survey-siliconflowfree-dual-LR",
+    );
+    assert.equal(
+        buildAttachmentTitle(baseInput({ type: "dual", dualMode: "TB" })),
+        "LLM Survey-siliconflowfree-dual-TB",
+    );
+    assert.equal(
+        buildAttachmentTitle(baseInput({ type: "mono", dualMode: "LR" })),
+        "LLM Survey-siliconflowfree-mono",
+    );
+    // Historical callers without dualMode retain the original dual label.
+    assert.equal(
+        buildAttachmentTitle(baseInput({ type: "dual" })),
+        "LLM Survey-siliconflowfree-dual",
+    );
+});
+
 test("titlePrefix style builds prefix-year-service-type (#310)", () => {
     const out = buildAttachmentTitle(
         baseInput({ style: "titlePrefix", prefixLength: 20 }),
@@ -121,6 +141,30 @@ test("custom template renders placeholders and falls back when empty", () => {
             baseInput({ style: "custom", template: "{year}", date: "n/a" }),
         ),
         "siliconflowfree-mono",
+    );
+});
+
+test("custom template keeps its structure and renders the selected dual mode", () => {
+    assert.equal(
+        buildAttachmentTitle(
+            baseInput({
+                type: "dual",
+                dualMode: "LR",
+                style: "custom",
+                template: "{shortTitle} [{type}]",
+            }),
+        ),
+        "LLM Survey [dual-LR]",
+    );
+    assert.equal(
+        buildAttachmentTitle(
+            baseInput({
+                type: "dual",
+                style: "custom",
+                template: "{shortTitle} [{type}]",
+            }),
+        ),
+        "LLM Survey [dual]",
     );
 });
 

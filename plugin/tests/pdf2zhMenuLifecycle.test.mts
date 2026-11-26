@@ -3,6 +3,7 @@ import test from "node:test";
 import fs from "node:fs";
 import vm from "node:vm";
 import ts from "typescript";
+import { supportsTranslationMode } from "../src/modules/pdf2zhTranslationOutputs.ts";
 
 // Execute the production hooks/menu factory with a small DOM/toolkit double.
 // The double models toolkit 5.1.0-beta.10: string targets use the active
@@ -20,6 +21,18 @@ function fakeMenuNode(options: any, popup?: any, key?: string) {
         styles: {},
         classes: new Set<string>(),
         children: [] as any[],
+        listeners: new Map<string, () => void>(),
+        addEventListener(name: string, listener: () => void) {
+            node.listeners.set(name, listener);
+        },
+        querySelector(selector: string): any {
+            for (const child of node.children) {
+                if (`#${child.options.id}` === selector) return child;
+                const match = child.querySelector(selector);
+                if (match) return match;
+            }
+            return null;
+        },
         getAttribute(name: string) {
             return name in node.attrs ? node.attrs[name] : null;
         },
@@ -61,6 +74,12 @@ function setup() {
     const windows: any[] = [];
     const errors: any[] = [];
     const commands: string[] = [];
+    const selectedItems: any[] = [];
+    const tasks: any[] = [];
+    const preferences: Record<string, unknown> = {
+        engine: "pdf2zh_next",
+        babeldoc: false,
+    };
     let active: any;
     function window() {
         const nodes = new Map();
@@ -77,6 +96,11 @@ function setup() {
     function createZToolkit() {
         const owned: any[] = [];
         return {
+            getGlobal(name: string) {
+                if (name === "ZoteroPane") {
+                    return { getSelectedItems: () => selectedItems };
+                }
+            },
             Menu: {
                 register(target: any, options: any) {
                     const popup =
@@ -111,6 +135,7 @@ function setup() {
         rootURI: "test/",
         Zotero: {
             getMainWindows: () => windows,
+            getMainWindow: () => active,
             Promise: { delay: async () => {} },
             PreferencePanes: { register() {} },
             logError: (error: any) => errors.push(error),
@@ -138,16 +163,77 @@ function setup() {
     const locale = { getString: (key: string) => key, initLocale() {} };
     const factory = load("../src/modules/pdf2zh.ts", {
         "../utils/locale": locale,
+        "../utils/prefs": { getPref: (key: string) => preferences[key] },
+        "./pdf2zhTranslationOutputs": { supportsTranslationMode },
     });
     const hooks = load("../src/hooks.ts", {
         "./modules/pdf2zh": factory,
+        "./modules/pdf2zhHelper": {
+            PDF2zhHelperFactory: {
+                processWorker: async (...args: any[]) => tasks.push(args),
+            },
+        },
         "./utils/locale": locale,
         "./utils/ztoolkit": { createZToolkit },
         "./modules/preferenceScript": { initTableUI() {} },
     }).default;
     const menu = (win: any) => win.nodes.get("#zotero-itemmenu-pdf2zh");
-    return { window, hooks, addon, menu, errors, commands, factory };
+    return {
+        window,
+        hooks,
+        addon,
+        menu,
+        errors,
+        commands,
+        factory,
+        selectedItems,
+        tasks,
+        preferences,
+    };
 }
+
+test("translation commands submit their mode directly without opening a dialog", async () => {
+    const s = setup();
+    const win: any = s.window();
+    win.openDialog = () => {
+        assert.fail("translation menu must not open an output dialog");
+    };
+    await s.hooks.onDialogEvents("translateMonoPDF");
+    await s.hooks.onDialogEvents("translateDualLRPDF");
+    await s.hooks.onDialogEvents("translateDualTBPDF");
+    assert.deepEqual(
+        s.tasks.map((task) => Array.from(task)),
+        [
+            ["translate", "mono"],
+            ["translate", "dual-lr"],
+            ["translate", "dual-tb"],
+        ],
+    );
+});
+
+test("native translation menu offers only the three supported output actions", async () => {
+    const s = setup();
+    const win = s.window();
+    await s.hooks.onMainWindowLoad(win);
+    const menu = s.menu(win);
+    assert.equal(menu.children.length, 3);
+    for (const child of menu.children) {
+        assert.equal(child.options.tag, "menuitem");
+        assert.ok(!child.options.label.startsWith("PDF2zh:"));
+        assert.equal(child.getAttribute("type"), null);
+        assert.equal(child.getAttribute("checked"), null);
+        assert.equal(child.getAttribute("disabled"), null);
+    }
+    s.preferences.engine = "pdf2zh";
+    s.preferences.babeldoc = false;
+    menu.listeners.get("popupshowing")?.();
+    assert.equal(menu.children[0].getAttribute("disabled"), null);
+    assert.equal(menu.children[1].getAttribute("disabled"), "true");
+    assert.equal(menu.children[2].getAttribute("disabled"), null);
+    s.preferences.engine = "pdf2zh_next";
+    menu.listeners.get("popupshowing")?.();
+    assert.equal(menu.children[1].getAttribute("disabled"), null);
+});
 
 test("startup registers each window even when another window is active", async () => {
     const s = setup();
@@ -168,10 +254,9 @@ test("closing an older window leaves the newer window menu usable", async () => 
     assert.equal(s.menu(a), undefined);
     for (const item of s.menu(b).options.children) item.commandListener();
     assert.deepEqual(s.commands, [
-        "translatePDF",
-        "cropPDF",
-        "comparePDF",
-        "crop-comparePDF",
+        "translateMonoPDF",
+        "translateDualLRPDF",
+        "translateDualTBPDF",
     ]);
 });
 test("shutdown removes menus from every window, then reload registers them", async () => {

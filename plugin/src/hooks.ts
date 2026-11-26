@@ -1,7 +1,7 @@
 // lifecycle hooks
 import { PDF2zhBasicFactory, PDF2zhUIFactory } from "./modules/pdf2zh";
 import { PDF2zhHelperFactory } from "./modules/pdf2zhHelper";
-import { getString, initLocale } from "./utils/locale";
+import { initLocale } from "./utils/locale";
 import { registerPrefsScripts, initTableUI } from "./modules/preferenceScript";
 
 async function onStartup() {
@@ -82,19 +82,25 @@ function onShortcuts(type: string) {
     }
 }
 
-function onDialogEvents(type: string) {
+async function onDialogEvents(type: string) {
     switch (type) {
-        case "translatePDF":
-            PDF2zhHelperFactory.processWorker("translate");
+        case "translateMonoPDF":
+            await PDF2zhHelperFactory.processWorker("translate", "mono");
+            break;
+        case "translateDualLRPDF":
+            await PDF2zhHelperFactory.processWorker("translate", "dual-lr");
+            break;
+        case "translateDualTBPDF":
+            await PDF2zhHelperFactory.processWorker("translate", "dual-tb");
             break;
         case "cropPDF":
-            PDF2zhHelperFactory.processWorker("crop");
+            await PDF2zhHelperFactory.processWorker("crop");
             break;
         case "crop-comparePDF":
-            PDF2zhHelperFactory.processWorker("crop-compare");
+            await PDF2zhHelperFactory.processWorker("crop-compare");
             break;
         case "comparePDF":
-            PDF2zhHelperFactory.processWorker("compare");
+            await PDF2zhHelperFactory.processWorker("compare");
             break;
         default:
             break;

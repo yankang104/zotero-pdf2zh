@@ -100,6 +100,27 @@ test("legacy engines keep their configuration without reading Wenyi preferences"
     }
 });
 
+test("a direct Wenyi output choice overrides two disabled exports without changing preferences", () => {
+    const preferences: Record<string, string> = {
+        "wenyi.mono": "false",
+        "wenyi.bilingual": "false",
+        "wenyi.bilingual_order": "source_first",
+    };
+    const before = { ...preferences };
+    const actual = translationConfig(
+        { engine: "wenyi", transFirst: "true" } as ServerConfig,
+        (key) => preferences[key],
+        { mono: true, bilingual: false },
+    );
+    assert.equal(actual.mono, "true");
+    assert.equal(actual.dual, "false");
+    assert.equal(actual.noMono, "false");
+    assert.equal(actual.noDual, "true");
+    assert.equal(actual.transFirst, "true");
+    assert.deepEqual(actual.wenyi!.output, { bilingual_order: "source_first" });
+    assert.deepEqual(preferences, before);
+});
+
 test("Wenyi sends typed workflow options, preserving false and ignoring retired preferences", () => {
     const prefs: Record<string, string> = {
         "wenyi.book_understanding": "false",

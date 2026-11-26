@@ -116,9 +116,10 @@ export function wenyiModelOptions(
 export function translationConfig(
     config: ServerConfig,
     read: ReadPreference = () => undefined,
+    outputOverride?: { mono: boolean; bilingual: boolean },
 ): ServerConfig {
     if (config.engine !== "wenyi") return config;
-    const output = wenyiExportOptions(read);
+    const output = { ...wenyiExportOptions(read), ...outputOverride };
     if (!output.mono && !output.bilingual) {
         throw new Error("Select at least one Wenyi PDF output");
     }

@@ -33,6 +33,7 @@ export interface TitleFormatInput {
     date: string;
     service: string;
     type: string;
+    dualMode?: string;
     style: string;
     prefixLength: number;
     template: string;
@@ -87,7 +88,12 @@ function renderTemplate(
 
 export function buildAttachmentTitle(input: TitleFormatInput): string {
     const service = collapseWhitespace(input.service);
-    const type = collapseWhitespace(input.type);
+    const baseType = collapseWhitespace(input.type);
+    const type =
+        baseType === "dual" &&
+        (input.dualMode === "LR" || input.dualMode === "TB")
+            ? `${baseType}-${input.dualMode}`
+            : baseType;
     const fallback = joinParts([service, type]);
     const title = collapseWhitespace(input.title);
     const shortTitle = collapseWhitespace(input.shortTitle);
