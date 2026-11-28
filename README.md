@@ -39,7 +39,7 @@
 
 ## 本地构建与更新
 
-当前维护版本为 **4.1.9-beta.6**。本仓库发布入口：[GitHub Release](https://github.com/yankang104/zotero-pdf2zh/releases/tag/v4.1.9-beta.6) · [插件 XPI](https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.6/zotero-pdf-2-zh.xpi) · [Server](https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.6/server.zip)。
+当前维护版本为 **4.1.9-beta.7**。本仓库发布入口：[GitHub Release](https://github.com/yankang104/zotero-pdf2zh/releases/tag/v4.1.9-beta.7) · [插件 XPI](https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.7/zotero-pdf-2-zh.xpi) · [Server](https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.7/server.zip)。
 
 本地构建的两个安装包统一放在项目根目录，固定保留一份：[插件 XPI](./zotero-pdf-2-zh.xpi) 和 [Server](./server.zip)。
 
@@ -50,9 +50,9 @@ cd ..
 python pack_server.py
 ```
 
-插件构建结束后自动将 XPI 移到项目根目录，两个安装包重复构建均覆盖同名文件。发布时统一插件与 Server 版本号，推送对应版本标签（本次为 `v4.1.9-beta.6`），GitHub Actions 会构建并发布两个安装包，同时更新 `release` 标签下的 `update-beta.json`，供 Zotero 获取测试版更新。
+插件构建结束后自动将 XPI 移到项目根目录，两个安装包重复构建均覆盖同名文件。发布时统一插件与 Server 版本号，推送对应版本标签。发布流程将安装包上传到 GitHub Releases，并在 `zotero-updates` 分支更新 `update-beta.json`，供 Zotero 获取测试版更新。
 
-安装本仓库版本后，可在 Zotero 的“工具 → 插件”中选择“检查更新”或启用自动更新，无需先卸载插件。旧安装如果仍使用上游或其他仓库的更新地址，需从上述本仓库发布入口下载 `4.1.9-beta.6` 的 XPI，直接覆盖安装一次，后续即可通过本仓库的更新通道升级。Server 更新仍需将 `server.zip` 内的 `server` 目录合并到现有目录后重启 Server，继续使用已有翻译环境。
+安装 `4.1.9-beta.7` 后，可在 Zotero 的“工具 → 插件”中选择“检查更新”或启用自动更新。从旧更新地址切换到新通道时（包括本仓库的 `4.1.9-beta.6`），直接覆盖安装一次上述 XPI，无需先卸载插件。Server 更新仍需将 `server.zip` 内的 `server` 目录合并到现有目录后重启 Server，继续使用已有翻译环境。
 
 LLM API 编辑器由服务商、API Key、Base URL、模型、请求头和请求体六块组成。主设置只保留一个翻译服务下拉；下方管理器按配置条目新增、编辑、删除、激活或置顶。选择主服务、选择管理器条目和激活配置各自独立，同一服务商最多一条配置激活，不同服务商可以同时激活。
 

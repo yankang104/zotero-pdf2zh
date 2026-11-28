@@ -75,7 +75,7 @@ python pack_server.py
 
 Server 测试需在具有 `server/requirements.txt` 依赖的环境运行，并将 `server` 加入 `PYTHONPATH`；可直接使用项目已有测试环境。真实引擎相关用例沿用各自的启用条件，不在测试中自动安装或更新用户引擎。
 
-两个安装包固定为根目录 `zotero-pdf-2-zh.xpi` 和 `server.zip`。插件构建后移动 XPI；Server 打包只收集程序目录、命令入口、示例配置和必要资源。发布 CI 使用同一打包脚本，并上传现有构建更新清单。本地 release 保留版本和标签流程，远程资产发布统一由标签 CI 完成。
+两个安装包固定为根目录 `zotero-pdf-2-zh.xpi` 和 `server.zip`。插件构建后移动 XPI；Server 打包只收集程序目录、命令入口、示例配置和必要资源。标签触发的发布流程使用同一打包脚本，将安装包与对应清单上传到版本 Release，再把该次 Release 的清单更新到 `zotero-updates` 分支。Zotero 从这个分支读取更新清单，从版本 Release 下载 XPI。
 
 旧快照和嵌套源码副本不参与当前维护，历史由 Git 保留。升级安装只更新程序文件，沿用既有用户数据保留规则，不增加运行时递归清理程序。
 

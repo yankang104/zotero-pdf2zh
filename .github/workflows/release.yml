@@ -54,21 +54,34 @@ jobs:
                   npm run build
             - name: Build Server package
               run: python pack_server.py
-            - name: Publish canonical packages and existing update manifests
+            - name: Publish packages and manifests for this version
               shell: bash
               run: |
-                  test -f zotero-pdf-2-zh.xpi
-                  test -f server.zip
                   if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+                    assets=(zotero-pdf-2-zh.xpi server.zip plugin/build/update-beta.json)
                     options=(--title "Release $RELEASE_TAG" --generate-notes)
-                    if [[ "$RELEASE_TAG" == *-* ]]; then options+=(--prerelease); fi
-                    gh release create "$RELEASE_TAG" "${options[@]}"
+                    if [[ "$RELEASE_TAG" == *-* ]]; then
+                      options+=(--prerelease)
+                    else
+                      assets+=(plugin/build/update.json)
+                    fi
+                    gh release create "$RELEASE_TAG" --verify-tag "${options[@]}" "${assets[@]}"
                   fi
-                  gh release upload "$RELEASE_TAG" zotero-pdf-2-zh.xpi server.zip --clobber
-                  if ! gh release view release >/dev/null 2>&1; then
-                    gh release create release --title 'Release Manifest' --prerelease --notes 'Zotero plugin update manifests.'
-                  fi
-                  gh release upload release plugin/build/update-beta.json --clobber
-                  if [[ "$RELEASE_TAG" != *-* ]]; then
-                    gh release upload release plugin/build/update.json --clobber
+            - uses: actions/checkout@v4
+              with:
+                  ref: zotero-updates
+                  path: zotero-updates
+            - name: Update the Zotero feed
+              shell: bash
+              run: |
+                  manifests="$RUNNER_TEMP/zotero-update-manifests"
+                  gh release download "$RELEASE_TAG" --pattern 'update*.json' --dir "$manifests"
+                  cp "$manifests"/update*.json zotero-updates/
+                  cd zotero-updates
+                  git config user.name 'github-actions[bot]'
+                  git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+                  git add -- update*.json
+                  if ! git diff --cached --quiet; then
+                    git commit -m "Publish Zotero updates for $RELEASE_TAG"
+                    git push origin HEAD:refs/heads/zotero-updates
                   fi
