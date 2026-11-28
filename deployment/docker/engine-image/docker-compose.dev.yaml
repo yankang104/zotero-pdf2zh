@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  zotero-pdf2zh-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # 开发版同样基于 next 引擎镜像
+        - ZOTERO_PDF2ZH_FROM_IMAGE=awwaawwa/pdfmathtranslate-next:latest
+        - SERVER_URL=https://raw.githubusercontent.com/yankang104/zotero-pdf2zh/main/server.zip
+    container_name: zotero-pdf2zh-dev
+    # 源码目录自带配置模板，跳过生产入口对挂载目录的模板复制。
+    entrypoint: []
+    command:
+      [
+        "python",
+        "/app/server/server.py",
+        "--enable_venv=False",
+        "--host=0.0.0.0",
+        "--check_update=False",
+        "--port=8890",
+      ]
+    restart: unless-stopped
+    ports:
+      - "8890:8890" # 注意：端口与生产环境相同，请不要同时运行
+    environment:
+      - TZ=Asia/Shanghai
+      - HF_ENDPOINT=https://hf-mirror.com
+    volumes:
+      # 【开发模式核心】
+      # 1. 使用仓库中的 Server 源码；修改 Python 后需要重启容器。
+      - ../../../server:/app/server
+      # 2. 翻译结果与生产目录相同；配置保存在源码 server/config 中。
+      - ./zotero-pdf2zh/translated:/app/server/translated
+      # 3. (可选) 字体挂载；先准备实际字体文件再取消注释。
+      # - ./zotero-pdf2zh/LXGWWenKai-Regular.ttf:/app/LXGWWenKai-Regular.ttf:ro

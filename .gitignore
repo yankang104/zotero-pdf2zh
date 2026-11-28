@@ -14,6 +14,7 @@ server/config/config.toml
 server/config/venv.json
 server/config/package_update_state.json
 server/config/relay_options.json
+integrations/macos/config.json
 server/config/*.invalid.bak
 server/config/*.invalid.*.bak
 

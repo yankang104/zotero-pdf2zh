@@ -22,16 +22,9 @@ python server.py --host 0.0.0.0
 
 ### Translation Engine
 
-| Feature | pdf2zh 1.x | pdf2zh_next 2.x |
-|---|---|---|
-| Status | Legacy compatibility | **Recommended** |
-| Config | `config.json` | `config.toml` |
-| Custom fonts | Supported | Primarily upstream font-family selection |
-| Dual layouts | Basic | LR side-by-side / TB alternating pages |
-| OCR / table / glossary features | Fewer | More complete |
-| DeepSeek V4 Thinking | N/A | Supported in 2.9.0+ |
-
-Use **pdf2zh_next** unless you specifically depend on a legacy feature.
+PDF translation uses **PDF2zh Next**, with configuration in `config.toml`.
+The legacy `pdf2zh` engine has been removed. The optional Wenyi whole-document
+engine remains available.
 
 ### Wenyi engine (first version)
 
@@ -167,7 +160,30 @@ Create or edit providers in **LLM API Configuration Management**.
 | Model | Model name |
 | Base URL | API base endpoint |
 | API Key | Credential |
+| API format | Choose Chat Completions, Responses or Messages directly in the basic settings |
+| Request headers | Expand to select authentication and edit header Key / Value pairs |
+| Request body | Expand to choose a separate Standard, Minimal or Streaming template and edit HTTP body fields |
 | Extra Parameters | Service-specific `extraData` fields |
+
+API format and body template settings are available for OpenAI, OpenAI-Liked and
+custom providers. Other built-in providers use their native interface.
+For a custom relay, enter its name, key, base URL and model, then select the format
+supported by the provider in **API format**. Expand **Request body** when you need
+to choose a template or edit body fields; expand **Request headers** for custom
+authentication or headers.
+
+The separate selectors retain the existing saved values:
+`extraData.zotero_api_format` uses `chat`, `responses` or `messages`, and
+`extraData.zotero_body_template` uses `standard`, `minimal` or `stream`.
+Minimal omits optional engine-generated request fields while applying explicitly
+entered body fields; Streaming enables a streaming response.
+Headers, authentication and extra body fields continue to use
+`zotero_extra_headers`, `zotero_auth_mode` and `zotero_extra_body`, respectively.
+
+Click **Save and use** to save and activate this configuration, select PDF2zh Next
+and set its provider as the current translation service (`next_service`).
+This also updates the service selector in the main settings.
+**Cancel** closes the editor without saving the draft.
 
 v4.1.0 can **fetch model lists** from supported providers. Fetched models are merged with built-in defaults and user history, then deduplicated. A failed fetch never removes the default list.
 

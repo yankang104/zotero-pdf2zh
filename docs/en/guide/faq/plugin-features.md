@@ -6,7 +6,7 @@ English documentation is under construction. Please switch to Chinese for comple
 
 ## Scanned PDF detected, translation failed
 
-**Cause**: pdf2zh/pdf2zh_next does not provide OCR functionality directly.
+**Cause**: `pdf2zh_next` does not provide document OCR directly.
 
 **Solution**: Use other tools to OCR the scanned PDF first, then translate with the plugin.
 

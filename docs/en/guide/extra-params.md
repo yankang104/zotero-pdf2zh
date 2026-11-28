@@ -2,7 +2,7 @@
 
 This page describes Zotero PDF2zh **v4.1.7** (including earlier features).
 
-This page documents service-specific options used by `pdf2zh_next` and legacy `pdf2zh` where noted. Extra parameter names must match the corresponding configuration fields.
+This page documents service-specific options used by `pdf2zh_next`. Extra parameter names must match the corresponding configuration fields.
 
 ::: tip Plugin behavior
 The Zotero LLM API editor stores values in **Extra Parameters** / `extraData`. Opening the editor lists the extra fields supported for the current service. Click **Add Parameter** to pick from that list, or type a custom key. Leave a field unset to keep the upstream default. JSON mode is not enabled by default.
@@ -96,15 +96,6 @@ uv run pdf2zh_next input.pdf \
   --deepseek-reasoning-effort high \
   --output ./output
 ```
-
-## DeepLX (legacy pdf2zh 1.x)
-
-DeepLX is configured through the legacy `pdf2zh` engine. In `pdf2zh` 1.x, the value of `DEEPLX_ACCESS_TOKEN` is optional, but the key itself must remain present. The current configuration mapping preserves this optional field.
-
-- `DEEPLX_ENDPOINT`: custom DeepLX endpoint; enter it as Base URL.
-- `DEEPLX_ACCESS_TOKEN`: optional token; leave it empty if the endpoint does not require one.
-
-If logs show requests to `https://api.deepl.com/v2/translate`, first verify that the selected service is `deeplx` rather than `deepl`.
 
 ## Ollama
 

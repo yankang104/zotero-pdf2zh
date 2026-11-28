@@ -3,13 +3,12 @@ startup-finish = 插件已就绪
 
 prefs-title = PDF2zh
 
-prefs-menu-translate = 翻译PDF
+prefs-menu-translate = 翻译
 prefs-menu-cut = 裁剪PDF
 prefs-menu-compare = 双语对照
 prefs-menu-crop-compare = 双语对照(裁剪后拼接)
 prefs-menu-translate-mono = 仅译文
-prefs-menu-translate-dual-lr = 双语对照（左右并排）
-prefs-menu-translate-dual-tb = 双语对照（交替页）
+prefs-menu-translate-dual-lr = 双语对照
 
 operation-progress-title = PDF2zh
 operation-progress-processing = 正在准备请求...
@@ -52,3 +51,4 @@ operation-error-completed-no-files = 任务已完成，但 Server 未返回任�
 operation-table-native-fallback = 当前服务端不支持表格美化，本次使用原有表格翻译。设置保持开启，升级服务端后自动生效。
 operation-error-partial-attachments = 仅导入 { $attached }/{ $total } 个附件：{ $message }
 operation-reference-native-fallback = 当前服务端不支持跳过参考文献，本次继续正常翻译。升级服务端后可重新尝试。
+operation-error-relay-server = 当前 Server 尚未支持新版自定义中转协议。请同时更新配套 Server 后重试；本次没有提交 PDF 翻译任务。

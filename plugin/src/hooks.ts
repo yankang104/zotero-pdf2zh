@@ -1,8 +1,11 @@
 // lifecycle hooks
-import { PDF2zhBasicFactory, PDF2zhUIFactory } from "./modules/pdf2zh";
-import { PDF2zhHelperFactory } from "./modules/pdf2zhHelper";
+import { registerContextMenu } from "./menus/contextMenu";
+import { processSelectedDocuments } from "./translation/workflow";
 import { initLocale } from "./utils/locale";
-import { registerPrefsScripts, initTableUI } from "./modules/preferenceScript";
+import {
+    registerPreferences,
+    registerPrefsScripts,
+} from "./settings/preferences";
 
 async function onStartup() {
     await Promise.all([
@@ -11,36 +14,20 @@ async function onStartup() {
         Zotero.uiReadyPromise,
     ]);
     initLocale(); // 初始化多语言
-    PDF2zhBasicFactory.registerPrefs(); // 注册偏好设置
+    registerPreferences();
     await Promise.all(
         Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
     );
 }
 
 async function onMainWindowLoad(win: Window): Promise<void> {
-    // 注册右键菜单, 显示加载弹窗
-    PDF2zhUIFactory.registerRightClickMenuItem(win);
-    await Zotero.Promise.delay(200);
-    // 渲染偏好设置的LLM API表格, 避免第一次打开Preference页面时LLM Config条目未完全加载
-    // TOCHECK: 目前可以有效解决问题, 但是关闭Preference后这个初始化的内容不会被删除吗??
-    initTableUI();
-    // 给老用户的通知
-    // const progressWindow = new ztoolkit.ProgressWindow(
-    //     "zotero-pdf2zh插件 给老用户的通知",
-    //     { closeOnClick: true, closeTime: -1 },
-    // ).createLine({
-    //     text: "重要:【老用户必读】 本插件在近期进行了重大更新, 并在此3.0.32版本推送到更新主分支。需要使用2.4.3版本的老用户根据插件主页更新的教程内容, 重新进行环境配置, 如果您不想重新配置, 请卸载此版本插件并在项目Github主页的Release页面重新下载并安装2.4.3版本插件, 并且关闭插件自动更新选项。为您造成的不便, 深感抱歉!",
-    //     type: "default",
-    //     progress: 100,
-    // });
-    // progressWindow.show();
-    // progressWindow.startCloseTimer(15000); // 15秒后自动关闭
+    registerContextMenu(win);
 }
 
 async function onPrefsEvent(type: string, data: { [key: string]: any }) {
     switch (type) {
         case "load":
-            registerPrefsScripts(data.window);
+            await registerPrefsScripts(data.window);
             break;
         default:
             return;
@@ -84,23 +71,23 @@ function onShortcuts(type: string) {
 
 async function onDialogEvents(type: string) {
     switch (type) {
+        case "translatePDF":
+            await processSelectedDocuments("translate", "both");
+            break;
         case "translateMonoPDF":
-            await PDF2zhHelperFactory.processWorker("translate", "mono");
+            await processSelectedDocuments("translate", "mono");
             break;
         case "translateDualLRPDF":
-            await PDF2zhHelperFactory.processWorker("translate", "dual-lr");
-            break;
-        case "translateDualTBPDF":
-            await PDF2zhHelperFactory.processWorker("translate", "dual-tb");
+            await processSelectedDocuments("translate", "dual-lr");
             break;
         case "cropPDF":
-            await PDF2zhHelperFactory.processWorker("crop");
+            await processSelectedDocuments("crop");
             break;
         case "crop-comparePDF":
-            await PDF2zhHelperFactory.processWorker("crop-compare");
+            await processSelectedDocuments("crop-compare");
             break;
         case "comparePDF":
-            await PDF2zhHelperFactory.processWorker("compare");
+            await processSelectedDocuments("compare");
             break;
         default:
             break;

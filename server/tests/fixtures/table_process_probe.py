@@ -6,7 +6,7 @@ import os
 import sys
 from types import ModuleType
 
-from utils import table_process
+import pdf2zh_server.engines.next_runtime.process_policy as table_process
 
 STATE = {"mode": None, "installs": 0}
 

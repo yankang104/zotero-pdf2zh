@@ -96,11 +96,9 @@ exit /b 0
 :main
 rem ---- 配置 ----
 set "PY_VER=3.12"
-set "ENV1=zotero-pdf2zh-venv"
-set "ENV2=zotero-pdf2zh-next-venv"
-rem 包清单与 config/venv.json.example 保持一致(2026-11 同步); 含 <> 的包必须带引号传递
-set "PACKAGES1=pdf2zh==1.9.11 pypdf PyMuPDF flask numpy==2.2.0 toml pdfminer.six==20250416 packaging "bitstring>=4.3.0,<5" "tencentcloud-sdk-python-tmt<3.1""
-set "PACKAGES2=pdf2zh_next>=2.9.0,<3.0.0 pypdf PyMuPDF flask toml packaging "bitstring>=4.3.0,<5""
+set "ENV=zotero-pdf2zh-next-venv"
+rem 包清单与 config/venv.json.example 保持一致；含 <> 的包必须带引号传递
+set "PACKAGES=pdf2zh_next>=2.9.0,<3.0.0 pypdf PyMuPDF flask toml packaging "bitstring>=4.3.0,<5""
 
 rem 默认参数
 set "USE_MIRROR=1"
@@ -116,11 +114,8 @@ call :log 检查 uv 是否已安装...
 where uv >nul 2>&1 || (call :log "❌ uv 未安装。请安装 uv 并确保在 PATH 中。" & exit /b 1)
 call :log uv 已安装。
 
-set "CUR_PACKAGES=%PACKAGES1%"
-call :create_uv_env "%ENV1%" "%PY_VER%" || exit /b 1
-
-set "CUR_PACKAGES=%PACKAGES2%"
-call :create_uv_env "%ENV2%" "%PY_VER%" || exit /b 1
+set "CUR_PACKAGES=%PACKAGES%"
+call :create_uv_env "%ENV%" "%PY_VER%" || exit /b 1
 
 call :log uv 环境创建并安装完成！
 exit /b 0

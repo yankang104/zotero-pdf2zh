@@ -7,7 +7,6 @@ import {
 } from "zotero-plugin-toolkit";
 import hooks from "./hooks";
 import { createZToolkit } from "./utils/ztoolkit";
-import { LLMApiData } from "./modules/llmApiManager";
 
 class Addon {
     public data: {
@@ -26,11 +25,6 @@ class Addon {
             tableHelper?: VirtualizedTableHelper;
         };
         dialog?: DialogHelper;
-        llmApis: {
-            map: Map<string, LLMApiData>;
-            cachedKeys: string[];
-            selectedKey?: string;
-        };
     };
     // Lifecycle hooks
     public hooks: typeof hooks;
@@ -43,10 +37,6 @@ class Addon {
             config,
             env: __env__,
             ztoolkit: createZToolkit(),
-            llmApis: {
-                map: new Map<string, LLMApiData>(),
-                cachedKeys: [],
-            },
         };
         this.hooks = hooks;
         this.api = {};

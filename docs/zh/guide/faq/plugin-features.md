@@ -95,9 +95,9 @@ pdf2zh_next 服务中的 OCR 模式与兼容模式是指什么？应该怎么选
 
 ### 解决方案
 
-调整 `server/utils/config.py` 中的 `config.pdf_w_offset` 值：
+调整 `server/pdf2zh_server/configuration/request.py` 中的 `config.pdf_w_offset` 值：
 
-1. 打开文件：`server/utils/config.py`
+1. 打开文件：`server/pdf2zh_server/configuration/request.py`
 2. 找到 `pdf_w_offset` 配置项
 3. **降低**该值（例如从 50 降到 30）
 4. 保存文件并重启 server.py
@@ -145,7 +145,7 @@ config.pdf_w_offset = 30  # 默认值可能更高，降低这个值
 
 ### 问题描述
 
-不知道该选择"翻译 PDF"、"裁剪 PDF"、"双语对照"还是"双语对照(裁剪)"。
+不知道该选择「翻译」、「双语对照」、「仅译文」、「裁剪 PDF」还是「双语对照(裁剪)」。
 
 ### 原因
 
@@ -153,11 +153,20 @@ config.pdf_w_offset = 30  # 默认值可能更高，降低这个值
 
 ### 解决方案
 
-### 翻译 PDF (Translate PDF)
+### 翻译
 
 - **适用场景**：大多数情况
-- **效果**：生成纯翻译后的 PDF
-- **文件类型**：替换原文或生成新文件（取决于设置）
+- **效果**：一次翻译同时生成仅译文 PDF 和左右并排的双语 PDF
+
+### 双语对照
+
+- **适用场景**：需要对照原文和译文
+- **效果**：只生成左右并排的双语 PDF
+
+### 仅译文
+
+- **适用场景**：只需要阅读译文
+- **效果**：只生成译文 PDF
 
 ### 裁剪 PDF (Crop PDF)
 
@@ -165,7 +174,7 @@ config.pdf_w_offset = 30  # 默认值可能更高，降低这个值
 - **效果**：在宽度 1/2 处裁剪，上下拼接
 - **注意**：会将页面两侧空白处裁剪，可能截断内容
 
-### 双语对照 (Compare PDF)
+### 独立双语对照处理 (Compare PDF)
 
 - **适用场景**：需要对照原文和翻译
 - **效果**：左边原文，右边翻译
@@ -181,7 +190,8 @@ config.pdf_w_offset = 30  # 默认值可能更高，降低这个值
 
 | 需求 | 推荐选项 |
 |------|----------|
-| 纯阅读翻译 | 翻译 PDF |
+| 同时需要译文和双语版 | 翻译 |
+| 只要译文 | 仅译文 |
 | 手机阅读 | 裁剪 PDF |
 | 学习/对照 | 双语对照 |
 | 双栏论文对照 | 双语对照(裁剪) |
@@ -215,42 +225,6 @@ config.pdf_w_offset = 30  # 默认值可能更高，降低这个值
 
 ---
 
-## 自定义字体不生效
-
-### 问题描述
-
-在 pdf2zh 引擎中配置了自定义字体，但没有生效。
-
-### 原因
-
-1. 远程服务器部署时，插件无法访问本地字体文件
-2. 字体路径配置错误
-
-### 解决方案
-
-### 本地部署
-
-1. 确保字体文件路径正确
-2. 路径必须是本地绝对路径
-3. 确保字体文件存在且可读
-
-### 远程部署
-
-如果采用远端服务器部署，暂时无法使用插件界面的自定义字体配置，需要手动修改配置文件：
-
-1. 打开服务器上的 `config.json` 文件
-2. 找到 `NOTO_FONT_PATH` 字段
-3. 修改为服务器上的字体路径
-4. 重启 server.py
-
-```json
-{
-  "NOTO_FONT_PATH": "/path/to/your/font.ttf"
-}
-```
-
----
-
 ## 额外配置参数怎么用？
 
 ### 问题描述
@@ -279,7 +253,7 @@ openai_send_temprature=true
 这些参数与 `config.toml` 文件中的字段相对应。`openai_send_temprature` 是上游为了兼容已有配置而保留的历史拼写；Server 会自动迁移旧版插件曾使用的 `openai_send_temperature`。
 
 ::: info 详细文档
-更多关于额外配置的信息，请参考 [extraData.md](https://github.com/guaguastandup/zotero-pdf2zh/blob/main/server/doc/extraData.md)
+更多关于额外配置的信息，请参考 [extraData.md](https://github.com/guaguastandup/zotero-pdf2zh/blob/main/docs/development/extraData.md)
 :::
 
 ### 常见参数示例
@@ -312,4 +286,4 @@ openai_send_temprature=true
    - 尝试切换 pdf2zh 和 pdf2zh_next 引擎
 
 3. **更换生成模式**
-   - 尝试不同的翻译选项（如从"翻译 PDF"改为"双语对照"）
+   - 尝试不同的翻译选项（如从「翻译」改为「仅译文」）

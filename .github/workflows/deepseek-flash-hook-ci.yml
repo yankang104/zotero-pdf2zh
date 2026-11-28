@@ -5,10 +5,10 @@ on:
         branches: [feat/deepseek-flash-thinking-hook]
     pull_request:
         paths:
-            - "server/utils/deepseek*"
-            - "server/utils/table_runner.py"
-            - "server/utils/table_runtime.py"
-            - "server/tests/test_deepseek_flash_patch.py"
+            - "server/pdf2zh_server/providers/deepseek_options.py"
+            - "server/pdf2zh_server/engines/next_runtime/**"
+            - "server/pdf2zh_server/pdf/tables/runtime.py"
+            - "server/tests/engines/test_deepseek_flash_patch.py"
             - ".github/workflows/deepseek-flash-hook-ci.yml"
 
 permissions:

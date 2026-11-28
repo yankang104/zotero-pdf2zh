@@ -1,0 +1,108 @@
+"""Install opt-in BabelDOC policies in both CLI and spawned workers.
+
+No global patch leaks between PDF jobs; fork children undo inherited hooks and
+spawn children install their own set. Order matters when both policies are on.
+"""
+
+from functools import partial
+
+from pdf2zh_server.engines.next_runtime.deepseek_flash_patch import (
+    install_deepseek_flash_patch,
+)
+from pdf2zh_server.pdf.reference_skip import (
+    install_reference_skip_policy,
+)
+from pdf2zh_server.pdf.reference_skip import (
+    policy_supported as reference_policy_supported,
+)
+from pdf2zh_server.pdf.reference_skip import (
+    warn_native_fallback as warn_reference_fallback,
+)
+from pdf2zh_server.pdf.tables.mode import parse_table_mode
+from pdf2zh_server.pdf.tables.runtime import (
+    install_table_policy,
+    table_policy_supported,
+    warn_native_table_fallback,
+)
+from pdf2zh_server.providers.relay_patch import install_relay_patch
+
+_native_worker = None
+_parent_restore = None
+
+
+def _install_policies(mode, reference_skip, flash_patch=False, relay_patch=None):
+    restores = []
+    try:
+        # This must run in the child too: DeepSeekSettings.transform() executes
+        # in create_babeldoc_config() inside pdf2zh_next's translation worker.
+        if flash_patch:
+            restores.append(install_deepseek_flash_patch())
+        # Same for the relay hook: the translator object that sends the HTTP
+        # requests is constructed inside the translation worker.
+        if relay_patch:
+            restores.append(install_relay_patch(relay_patch))
+        # Table process_page wraps the reference filter, not vice versa.
+        if reference_skip:
+            restores.append(install_reference_skip_policy())
+        if mode:
+            restores.append(install_table_policy(mode))
+    except Exception:
+        for restore in reversed(restores):
+            restore()
+        raise
+
+    def restore():
+        for callback in reversed(restores):
+            callback()
+
+    return restore
+
+
+def _run_table_worker(
+    mode, *args, reference_skip=False, flash_patch=False, relay_patch=None, **kwargs
+):
+    from pdf2zh_next import high_level
+
+    native = _native_worker or high_level._translate_wrapper
+    if _parent_restore is not None:
+        _parent_restore()
+    restore = _install_policies(mode, reference_skip, flash_patch, relay_patch)
+    try:
+        return native(*args, **kwargs)
+    finally:
+        restore()
+
+
+def install_table_process_policy(
+    mode, reference_skip=False, flash_patch=False, relay_patch=None
+):
+    parse_table_mode(mode)
+    if mode and not table_policy_supported():
+        warn_native_table_fallback()
+        mode = None
+    if reference_skip and not reference_policy_supported():
+        warn_reference_fallback()
+        reference_skip = False
+    if not mode and not reference_skip and not flash_patch and not relay_patch:
+        return lambda: None
+
+    from pdf2zh_next import high_level
+
+    global _native_worker, _parent_restore
+    if _native_worker is not None:
+        raise RuntimeError("BabelDOC process policy is already installed")
+    restore_policy = _install_policies(mode, reference_skip, flash_patch, relay_patch)
+    native = high_level._translate_wrapper
+    _native_worker, _parent_restore = native, restore_policy
+    worker_options = {"reference_skip": reference_skip, "flash_patch": flash_patch}
+    if relay_patch:
+        worker_options["relay_patch"] = relay_patch
+    high_level._translate_wrapper = partial(_run_table_worker, mode, **worker_options)
+
+    def restore():
+        global _native_worker, _parent_restore
+        high_level._translate_wrapper = native
+        _native_worker = _parent_restore = None
+        restore_policy()
+
+    return restore

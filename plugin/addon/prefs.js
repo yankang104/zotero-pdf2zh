@@ -7,15 +7,11 @@ pref("__prefsPrefix__.sourceLangSelect", "en");
 pref("__prefsPrefix__.targetLangSelect", "zh-CN");
 
 pref("__prefsPrefix__.engine", "pdf2zh_next");
-pref("__prefsPrefix__.engineSelect", "pdf2zh_next");
 
-pref("__prefsPrefix__.service", "bing");
-pref("__prefsPrefix__.serviceSelect", "bing");
 pref("__prefsPrefix__.next_service", "siliconflowfree");
 pref("__prefsPrefix__.next_serviceSelect", "siliconflowfree");
 
 pref("__prefsPrefix__.skipLastPages", 0);
-pref("__prefsPrefix__.threadNum", 4);
 pref("__prefsPrefix__.qps", 10);
 pref("__prefsPrefix__.poolSize", 0);
 pref("__prefsPrefix__.rename", true);
@@ -23,11 +19,6 @@ pref("__prefsPrefix__.renameStyle", "shortTitle");
 pref("__prefsPrefix__.renamePrefixLength", 20);
 pref("__prefsPrefix__.renameTemplate", "{titlePrefix}-{year}-{service}-{type}");
 pref("__prefsPrefix__.showProgress", true);
-
-// pdf1x
-pref("__prefsPrefix__.skipSubsetFonts", false);
-pref("__prefsPrefix__.babeldoc", false);
-pref("__prefsPrefix__.fontFile", "");
 
 // pdf2x
 pref("__prefsPrefix__.fontFamily", "auto");
@@ -50,17 +41,6 @@ pref("__prefsPrefix__.prettierTables", false);
 pref("__prefsPrefix__.skipReferences", false);
 pref("__prefsPrefix__.ignoreCache", false);
 pref("__prefsPrefix__.onlyIncludeTranslatedPage", false);
-
-// Wenyi plugin defaults; keep the CLI's own preset unchanged.
-pref("__prefsPrefix__.wenyi.prompt_genre", "academic");
-pref("__prefsPrefix__.wenyi.book_understanding", "true");
-pref("__prefsPrefix__.wenyi.translation_mode", "standard");
-pref("__prefsPrefix__.wenyi.polish", "true");
-pref("__prefsPrefix__.wenyi.review", "true");
-pref("__prefsPrefix__.wenyi.annotation_alignment", "false");
-pref("__prefsPrefix__.wenyi.mono", "true");
-pref("__prefsPrefix__.wenyi.bilingual", "false");
-pref("__prefsPrefix__.wenyi.bilingual_order", "target_first");
 
 // generate
 pref("__prefsPrefix__.mono", true);

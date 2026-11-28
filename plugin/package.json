@@ -1,7 +1,7 @@
 {
     "name": "zotero-pdf2zh",
-    "version": "4.1.8",
-    "description": "PDF translation for Zotero with PDF2zh/PDF2zh_next, bilingual layouts, batch processing, and DeepSeek V4 support.",
+    "version": "4.1.9-beta.6",
+    "description": "PDF translation for Zotero with PDF2zh Next, bilingual layouts, batch processing, and DeepSeek V4 support.",
     "config": {
         "addonName": "Zotero PDF2zh",
         "addonID": "pdf2zh@guaguastandup.com",
@@ -11,21 +11,22 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/guaguastandup/zotero-pdf2zh.git"
+        "url": "git+https://github.com/yankang104/zotero-pdf2zh.git"
     },
     "author": "guaguastandup",
     "bugs": {
-        "url": "https://github.com/guaguastandup/zotero-pdf2zh/issues"
+        "url": "https://github.com/yankang104/zotero-pdf2zh/issues"
     },
-    "homepage": "https://github.com/guaguastandup/zotero-pdf2zh#readme",
+    "homepage": "https://github.com/yankang104/zotero-pdf2zh#readme",
     "license": "AGPL-3.0-or-later",
     "scripts": {
         "start": "zotero-plugin serve",
         "build": "tsc --noEmit && zotero-plugin build",
+        "postbuild": "node -e \"require('node:fs').renameSync('build/zotero-pdf-2-zh.xpi', '../zotero-pdf-2-zh.xpi')\"",
         "lint:check": "prettier --check . && eslint .",
         "lint:fix": "prettier --write . && eslint . --fix",
         "release": "zotero-plugin release",
-        "test": "node --experimental-strip-types --test tests/*.test.mts",
+        "test": "node --experimental-strip-types --test \"tests/**/*.test.mts\"",
         "update-deps": "npm update --save"
     },
     "dependencies": {

@@ -15,7 +15,7 @@
 [![License](https://img.shields.io/github/license/guaguastandup/zotero-pdf2zh)](https://github.com/guaguastandup/zotero-pdf2zh/blob/main/LICENSE)
 [![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/guaguastandup/zotero-pdf2zh)
 
-在 Zotero 中直接使用 [PDF2zh](https://github.com/Byaidu/PDFMathTranslate) 与 [PDF2zh_next](https://github.com/PDFMathTranslate/PDFMathTranslate-next) 翻译 PDF，保留公式与排版，并提供双语对照、裁剪阅读、批量翻译与多种 LLM 服务配置。
+在 Zotero 中直接使用 [PDF2zh](https://github.com/Byaidu/PDFMathTranslate) 与 [PDF2zh_next](https://github.com/PDFMathTranslate-next/PDFMathTranslate-next) 翻译 PDF，保留公式与排版，并提供双语对照、裁剪阅读、批量翻译与多种 LLM 服务配置。
 
 **📚 项目文档：** [zotero-pdf2zh.github.io](https://zotero-pdf2zh.github.io)
 
@@ -33,9 +33,108 @@
 >
 > 
 >
-> 📦 **下载最新版本：** [Zotero 插件 XPI](https://github.com/guaguastandup/zotero-pdf2zh/releases/latest/download/zotero-pdf-2-zh.xpi) · [Server](https://github.com/guaguastandup/zotero-pdf2zh/releases/latest/download/server.zip) · [完整文档](https://zotero-pdf2zh.github.io/)
+> 📦 **上游发布包：** [Zotero 插件 XPI](https://github.com/guaguastandup/zotero-pdf2zh/releases/latest/download/zotero-pdf-2-zh.xpi) · [Server](https://github.com/guaguastandup/zotero-pdf2zh/releases/latest/download/server.zip) · [完整文档](https://zotero-pdf2zh.github.io/)
 
 </div>
+
+## 本地构建与更新
+
+当前维护版本为 **4.1.9-beta.6**。本仓库发布入口：[GitHub Release](https://github.com/yankang104/zotero-pdf2zh/releases/tag/v4.1.9-beta.6) · [插件 XPI](https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.6/zotero-pdf-2-zh.xpi) · [Server](https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.6/server.zip)。
+
+本地构建的两个安装包统一放在项目根目录，固定保留一份：[插件 XPI](./zotero-pdf-2-zh.xpi) 和 [Server](./server.zip)。
+
+```shell
+cd plugin
+npm run build
+cd ..
+python pack_server.py
+```
+
+插件构建结束后自动将 XPI 移到项目根目录，两个安装包重复构建均覆盖同名文件。发布时统一插件与 Server 版本号，推送对应版本标签（本次为 `v4.1.9-beta.6`），GitHub Actions 会构建并发布两个安装包，同时更新 `release` 标签下的 `update-beta.json`，供 Zotero 获取测试版更新。
+
+安装本仓库版本后，可在 Zotero 的“工具 → 插件”中选择“检查更新”或启用自动更新，无需先卸载插件。旧安装如果仍使用上游或其他仓库的更新地址，需从上述本仓库发布入口下载 `4.1.9-beta.6` 的 XPI，直接覆盖安装一次，后续即可通过本仓库的更新通道升级。Server 更新仍需将 `server.zip` 内的 `server` 目录合并到现有目录后重启 Server，继续使用已有翻译环境。
+
+LLM API 编辑器由服务商、API Key、Base URL、模型、请求头和请求体六块组成。主设置只保留一个翻译服务下拉；下方管理器按配置条目新增、编辑、删除、激活或置顶。选择主服务、选择管理器条目和激活配置各自独立，同一服务商最多一条配置激活，不同服务商可以同时激活。
+
+编辑器与主设置共用服务商目录，新建时默认使用当前翻译服务。内置服务在同一个框内显示名称；选择右侧 ▼ 中的「＋ 自定义服务商…」后，同框可输入自己的配置名称。URL 单独填写，空地址或上一站点默认地址会随内置服务切换，手填地址保留。模型和 URL 支持输入及原生下拉，Key 使用密码输入框，模型与「获取模型」按钮同行。请求头和请求体默认折叠，提供 Key/Value 行、常用值及模板；底部的「保存并使用」会保存并激活该配置，同时切换主设置的翻译服务。
+
+「获取模型」由 Zotero 直接访问服务商，使用当前未保存的 URL、Key、认证和请求头，不需要先启动 Server，也不解析尚未填写完整的翻译请求体。获取结果加入模型候选，手填模型继续保留。请求体展开区中的「翻译参数」可编辑原有超时、思考模式等业务字段；内置服务使用原生翻译接口，自定义协议和请求头、请求体用于 OpenAI、OpenAI-Liked 及自定义服务商。
+
+服务商名称、保存与使用、模型获取见[配置说明](./docs/zh/guide/configuration.md)；请求体的九个协议/模板组合、请求头和原有业务参数见[额外参数说明](./docs/zh/guide/extra-params.md)。源码职责记录在 [Server 参数文档](./docs/development/extraData.md)。
+
+### 项目结构与调用链
+
+项目按业务功能组织。完整目录、依赖方向、配置边界与维护入口见[开发架构说明](./docs/development/architecture.md)。
+
+| 目录 | 维护职责 |
+| --- | --- |
+| `plugin/src/settings/` | 配置唯一内存状态、偏好读写、设置页与 API 表格 |
+| `plugin/src/translation/` | 任务编排、Server 通信、能力协商和进度展示 |
+| `plugin/src/attachments/`、`menus/` | PDF 文件、结果导入、附件命名与右键菜单 |
+| `plugin/addon/content/settings/` | Zotero 原生设置页面和外置编辑器脚本 |
+| `server/pdf2zh_server/configuration/`、`tasks/` | 请求配置、配置快照、任务生命周期和工作区 |
+| `server/pdf2zh_server/providers/` | 服务商路由、模型目录、请求头、请求体与协议适配 |
+| `server/pdf2zh_server/engines/`、`pdf/`、`environment/` | 引擎执行、PDF 处理及 Python 环境管理 |
+| `deployment/docker/`、`integrations/macos/` | 两种 Docker 部署和接入主后端的 macOS 自动化 |
+
+```mermaid
+flowchart LR
+    Z["Zotero 插件"] -->|"PDF、翻译选项、llm_api"| S["Server HTTP 接口"]
+    S --> T["任务服务"]
+    T -->|"任务配置与 CLI 参数"| N["引擎子进程"]
+    N --> B["BabelDOC / PDF 处理"]
+    N <-->|"请求协议、请求头、请求体与译文"| P["模型服务商"]
+    B -->|"PDF 产物"| T
+    T -->|"任务进度与产物地址"| Z
+```
+
+`server/server.py` 保留原启动命令和版本字面量，实际组装、HTTP、任务和引擎逻辑位于应用包。PDF 翻译使用 `pdf2zh_next`，Wenyi 保留独立执行流程；上游翻译引擎和 BabelDOC 仍独立安装。
+
+### 配置来源与请求边界
+
+插件配置的持久化来源仍是 Zotero 偏好设置 `extensions.zotero.pdf2zh.llmApis`，内容为带稳定 `key` 的配置数组。`settings/apiConfigurations.ts` 维护唯一加载后的 API 配置 Map；选中行和行键属于设置页控制器的局部界面状态。编辑器历史只用于输入建议。
+
+`extensions.zotero.pdf2zh.next_service` 保存当前服务商名称。翻译流程先重新加载配置，再按名称取出激活条目；`serverClient.sendRequest()` 只发送原有 `service`、`model`、`apiKey`、`apiUrl`、`extraData`，不依赖设置页是否打开。Server 的 `config/config.toml` 是引擎执行配置，没有下发的基本字段仍沿用既有保留规则。
+
+请求配置由 `configuration/request.py` 解析，服务别名和自定义服务由 `providers/catalog.py`、`routing.py` 处理。自定义名称使用同名配置的 Base URL 和 API 协议，通过 OpenAI-compatible 执行服务调用。配置写入与任务快照在 `configuration/storage.py`。
+
+`extraData` 中五个 `zotero_*` 请求字段仍由 `providers/relay_options.py` 提取，写入当前任务的独立配置。请求头和请求体分别由对应模块构造，保持 `false`、`0`、`null`、嵌套对象及显式覆盖的原有语义。功能说明见[额外参数](./docs/zh/guide/extra-params.md)，技术字段见[请求参数说明](./docs/development/extraData.md)。
+
+启用运行时适配时，`engines/next_runtime/launcher.py` 定位独立 runner，在引擎子进程中安装表格、参考文献、思考控制或协议适配；不修改已安装引擎文件。Wenyi 保留独立 Python 与 bridge 隔离。两个分支均使用迁移后的明确脚本路径。
+
+### 本机环境与关联仓库
+
+本机在 2026-11-25 核对的现有 Next 环境为 `D:/miniconda3/envs/zotero-pdf2zh-next-venv`：
+
+| 项目 | 实际版本或路径 |
+| --- | --- |
+| Python | `3.12.16`；`D:/miniconda3/envs/zotero-pdf2zh-next-venv/python.exe` |
+| PDFMathTranslate-next | `pdf2zh-next 2.10.2`；`Lib/site-packages/pdf2zh_next/` |
+| BabelDOC | `0.7.1`；`Lib/site-packages/babeldoc/` |
+| OpenAI SDK | `3.59.0`，由上述环境中的 Next 翻译器使用 |
+| 引擎入口 | `Scripts/pdf2zh_next.exe`，对应 `pdf2zh_next.main:cli` |
+| Server 依赖 | Flask、TOML、pypdf、PyMuPDF 均在该环境的 `Lib/site-packages/` 中 |
+
+默认 `--enable_venv=True` 时，Server 自身的 Python 与翻译引擎 Python 可以不同。`--env_tool=conda` 让环境管理器解析 `zotero-pdf2zh-next-venv` 的实际位置，使用其 CLI 或 Python 模块入口；托管子进程不依赖外部 `PYTHONPATH` 指向源码。
+
+`--enable_venv=False` 时，Server 优先使用 PATH 中的 `pdf2zh_next`。PATH 未包含该入口时，再使用当前 Server Python 的脚本目录（Windows 为 `Scripts`）中的引擎入口；因此，用已安装引擎的 Python 绝对路径启动 Server，也可在未激活 PATH 时运行翻译。若这两处都没有入口，错误会显示当前 Python 路径，并提示激活对应环境或改用已安装引擎的 Python 启动 Server，不自动切换到其他环境。
+
+本机现有环境可同时承载 Server 与已安装的 Next，以下是明确使用这一环境的 PowerShell 启动方式：
+
+```powershell
+conda activate zotero-pdf2zh-next-venv
+Set-Location D:\Projects\zotero-pdf2zh\server
+& D:\miniconda3\envs\zotero-pdf2zh-next-venv\python.exe server.py --enable_venv=False
+```
+
+本机另有两个独立 Git 仓库：
+
+- `D:/Projects/zotero-pdf2zh`：`origin` 为 [yankang104/zotero-pdf2zh](https://github.com/yankang104/zotero-pdf2zh)，`qiaoyan` 指向协作仓库 [qiaoyan104/zotero-pdf2zh](https://github.com/qiaoyan104/zotero-pdf2zh)，`upstream` 为 [guaguastandup/zotero-pdf2zh](https://github.com/guaguastandup/zotero-pdf2zh)。
+- `D:/Projects/PDFMathTranslate-next`：`origin` 为 [yankang104/PDFMathTranslate-next](https://github.com/yankang104/PDFMathTranslate-next)，`upstream` 为 [PDFMathTranslate-next/PDFMathTranslate-next](https://github.com/PDFMathTranslate-next/PDFMathTranslate-next)。源码项目版本也为 `2.10.2`，其依赖声明为 `babeldoc>=0.7.1,<0.8.0`。
+
+目前 Next 与 BabelDOC 均从上述环境的 `Lib/site-packages` 加载，Next 安装也不是指向克隆目录的 editable 安装。Fork 和 clone 建立了可协作的源码仓库，尚未让 `D:/Projects/PDFMathTranslate-next` 自动接管运行。未来修改引擎后，需要把实际执行环境中的 Next 安装指向该 fork 源码或其构建包，再重启 Server；本轮没有修改或重新安装引擎。
+
+构建 XPI 与 `server.zip` 只更新插件和 Server，不会替换这一环境中的 Next 或 BabelDOC。适配上游改动时，应核对 Next 的配置字段、CLI、`OpenAITranslator` 接口和 `high_level` 工作进程入口，以及 BabelDOC 的 PDF 处理接口；运行时适配的接线仍由本仓库负责。
 
 ## 📖 目录
 
@@ -263,7 +362,7 @@ python server.py --env_tool=conda
 
 **配置选项说明**
 
-- 切换翻译引擎`pdf2zh/pdf2zh_next`，界面将显示不同引擎的翻译配置
+- PDF 翻译使用固定的 `pdf2zh_next` 引擎
 
 - 可选 [Wenyi 引擎](docs/zh/guide/configuration.md#wenyi-引擎第一版)，用于完整 PDF 的单语或双语翻译。
 
@@ -278,12 +377,7 @@ python server.py --env_tool=conda
         >- 对于上游为**并发数限制**: pool size = max(向下取整(0.9*官方并发数限制), 官方并发数限制-20)，qps = pool size
         >- 如果您不知道怎么设置, 请直接设置qps即可, pool size设置为默认值0即可
     
-    - 翻译引擎pdf2zh的自定义字体：
-    
-        > - 字体文件路径为本地路径。
-        > - 如果采用远端服务器部署，暂时无法在插件设置中指定字体路径。需要您手动修改`config.json`文件中的`NOTO_FONT_PATH`字段。
-    
-    - 额外配置参数名需要与 config 文件中的字段相同。v4.1.7 起，在「LLM API配置管理」里点「添加参数」，可从当前服务支持的字段下拉选择（也可选「自定义」手填）。OpenAI / DeepSeek / SiliconFlow 等支持 `*_enable_json_mode`（如 `openai_enable_json_mode`、`deepseek_enable_json_mode`），**默认关闭**；部分模型漏译段落时可尝试设为 `true`。字段说明见 [额外参数文档](./docs/zh/guide/extra-params.md) 与 [extraData.md](./server/doc/extraData.md)
+    - 请求头和请求体展开后可填写 Key / Value。原有超时、温度、思考强度和 JSON mode 等业务参数继续按原字段保存在配置中，编辑器不再显示单独的高级参数区。JSON mode 默认关闭。字段说明见 [额外参数文档](./docs/zh/guide/extra-params.md) 与 [extraData.md](./docs/development/extraData.md)。
 
 **网页端查看翻译进度**
 
@@ -311,40 +405,18 @@ python server.py --env_tool=conda
 
 > 📢: v4.0.3(3月7日) windows端暂时不支持多进度条显示(多个pdf同时翻译时只会有一个进度条会更新，是bug待修复)
 
-**翻译引擎对比**
+**翻译引擎**
 
-插件支持两种翻译引擎，请根据需求选择：
-
-| 对比项 | PDF2ZH (旧版) | PDF2ZH Next (新版) |
-|--------|---------------|-------------------|
-| **维护状态** | ❌ 不再活跃维护 | ✅ 持续更新维护 |
-| **翻译速度** | ⚡ 较快 | 速度适中 |
-| **自定义字体** | ✅ 支持更换自定义字体 | ❌ 不支持 |
-| **配置文件** | `config.json` | `config.toml` |
-| **双语模式** | 默认为Top&Bottom | 默认为 Left&Right |
-| **术语表功能** | ❌ 不支持 | ✅ 自动提取并使用术语表 |
-| **表格翻译** | ❌ 不支持 | ✅ 支持表格内容翻译 |
-| **OCR兼容** | ❌ 不支持 | ✅ 支持 OCR 兼容模式和自动 OCR |
-| **支持的翻译服务** | 支持海量翻译服务 | 提供免费 siliconflowfree |
-| **上游项目** | [Byaidu/PDFMathTranslate](https://github.com/Byaidu/PDFMathTranslate) | [PDFMathTranslate-next](https://github.com/PDFMathTranslate/PDFMathTranslate-next) |
+PDF 翻译使用 **PDF2zh Next**，配置保存在 `server/config/config.toml`。插件还保留可选的
+[Wenyi 引擎](docs/zh/guide/configuration.md#wenyi-引擎第一版)。
 
 **翻译服务配置**
 
-配置翻译服务需完成两步：
+在「LLM API 配置管理」区域点击「新增」或「编辑」，在服务商输入框中选择已有名称或直接填写自己的名称，再填写 API Key、Base URL 和模型。模型可手填，也可点击同一行的「获取模型列表」后选择。
 
-**第一步：添加API配置**
+需要调整请求时，展开「请求头」或「请求体」。请求体用一个选择框组合 Chat Completions、Responses、Messages 与标准、最少字段、流式三种模板，共九个选项。
 
-在"LLM API配置管理"区域点击"新增"，填写服务配置信息。同一服务可添加多个配置，但只能激活其中一个。
-
-**第二步：选择翻译服务**
-
-在页面顶部的"翻译服务"下拉菜单中，选择要使用的服务名称。
-
->警告：仅添加API配置不会生效，必须完成第二步选择服务，翻译功能才能使用。
-
-<div align=center>
-<img src="./images/editor.png" width="400"/>
-</div>
+点击「保存并使用」会保存并激活配置，将服务商名称同步到主设置，并切换到 PDF2zh Next 使用该服务。同一服务商名称下可以保存多条配置，同时只激活一条；「取消」关闭编辑器，不保存本次修改。
 
 
 **💡 翻译服务介绍(必读)**
@@ -369,13 +441,13 @@ python server.py --env_tool=conda
 
 ## 第六步： 关于翻译选项
 
-在 Zotero 中右键原文 PDF 或论文条目，从「PDF2zh」子菜单直接选择一种翻译格式：
+在 Zotero 中右键原文 PDF 或论文条目，从「PDF2zh」子菜单选择：
 
-- `PDF2zh ▶ 仅译文`：生成单语译文 PDF。
-- `PDF2zh ▶ 双语对照（左右并排）`：生成左右并排的双语 PDF，附件以 `LR` 区分。
-- `PDF2zh ▶ 双语对照（交替页）`：生成交替页排列的双语 PDF，附件以 `TB` 区分。
+- `PDF2zh ▶ 翻译`：一次翻译同时生成仅译文 PDF 和左右并排的双语 PDF。
+- `PDF2zh ▶ 双语对照`：只生成左右并排的双语 PDF。
+- `PDF2zh ▶ 仅译文`：只生成译文 PDF。
 
-点击菜单项会直接提交单一格式，不显示复选框、选择弹窗或开始按钮。所选布局仅对本次任务生效，不修改已保存的默认生成设置；当前引擎不支持的版式显示为不可用。可多选条目后右键批量翻译。
+菜单项会直接提交任务，不显示额外选择窗口；生成格式仅对本次任务生效，不修改已保存的默认设置。`pdf2zh_next` 和 Wenyi 支持以上三项。可多选条目后右键批量翻译。
 
 ## 第七步: 关于包更新
 
@@ -410,24 +482,25 @@ python server.py --enable_winexe=True --winexe_path='./pdf2zh-v2.x.x-BabelDOC-v0
 ```
 
 **注意事项：**
-- exe版本**不需要配置Python虚拟环境**，- 确保exe路径正确，路径相对于 `server` 目录
+- exe版本**不需要配置Python虚拟环境**。
+- 确保exe路径正确，路径相对于 `server` 目录。
 - 如果遇到DLL相关错误，请安装 [Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe)
 - exe模式目前可能存在一些兼容性问题，如果遇到问题建议使用虚拟环境方式
 
 ### Docker 部署
 
 - zotero-pdf2zh [docker链接](https://hub.docker.com/r/vanxv/zotero-pdf2zh) by [@xucongyong](https://github.com/xucongyong)
-- 请参考：[Docker部署方法一](./docker/README.md) by [@Rosetears520](https://github.com/Rosetears520)
-- 请参考：[Docker部署方法二](./docker2/README.md) by [@taozhe6](https://github.com/taozhe6)
+- 请参考：[Docker部署方法一](./deployment/docker/engine-container/README.md) by [@Rosetears520](https://github.com/Rosetears520)
+- 请参考：[Docker部署方法二](./deployment/docker/engine-image/README.md) by [@taozhe6](https://github.com/taozhe6)
 
 ### Homebrew/Linuxbrew 部署（MacOS/Linux用户）
 
 - 参考：[做了一个 homebrew 的 tap，便于 mac 用户直接使用 #187](https://github.com/guaguastandup/zotero-pdf2zh/issues/187) by [@NightWatcher314](https://github.com/NightWatcher314)
-- 仓库链接: [NightWatcher314/zotero-pdf2zh-server](https://github.com/NightWatcher314/zotero-pdf2zh-server)
+- Tap 仓库：[NightWatcher314/homebrew-formula](https://github.com/NightWatcher314/homebrew-formula)，使用 Next 配方 `zotero-pdf2zh-next`。
 
 ### 不使用虚拟环境管理
 
-如果您只想使用 pdf2zh_next/pdf2zh 引擎中的一个，并且全局 Python 版本为 3.12.0，可以不使用虚拟环境管理。
+如果全局 Python 版本为 3.12.0，可以不使用虚拟环境管理。
 
 > ⚠️ **注意**：不使用虚拟环境管理时，您需要确保：
 > - 全局 Python 版本为 3.12 或更高
@@ -468,13 +541,9 @@ pip install -r requirements.txt
 python server.py --env_tool=conda --enable_venv=False
 ```
 
-#### 手动安装依赖（如果只需要特定引擎）
+#### 手动安装 Next 引擎
 
 ```shell
-# 如果只使用 pdf2zh:
-pip install pdf2zh==1.9.11 numpy==2.2.0
-
-# 如果只使用 pdf2zh_next:
 pip install pdf2zh_next
 ```
 
@@ -624,7 +693,6 @@ source ~/.bashrc
 -   **【🔥高频问题】Q：我遇到了““动态链接库(DLL)初始化例程失败”的错误，但是我尝试安装了提示中指定的[vs_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe)包，依然报错，该怎么办？**
 -   A：
     -   您需要进入虚拟环境，将onnx包降级到`1.16.1`版本
-        -   pdf2zh 对应的虚拟环境名为`zotero-pdf2zh-venv`
         -   pdf2zh_next对应的虚拟环境名为`zotero-pdf2zh-next-venv`
         -   如果您依然不会操作，可以把这段内容发送给AI，并且告诉它您正在使用uv还是conda进行虚拟环境管理。
     -   您也许缺少的是x86或其他版本的Visual C++ Redistributable，可以尝试安装以下三个文件：
@@ -637,7 +705,7 @@ source ~/.bashrc
         - <img src="./images/onnx-solution.png" style="width: 100px"/>
 
 -  【**🔥高频问题】Q: 我的命令行中提示: Failed to canonicalize script path**
--  A: 删除`server`路径下的`zotero-pdf2zh-next-venv`或者`zotero-pdf2zh-venv`文件夹, 然后重新配置。使用uv方法在安装配置后不可以修改路径名/移动文件夹。
+-  A: 删除`server`路径下的`zotero-pdf2zh-next-venv`文件夹，然后重新配置。使用uv方法在安装配置后不可以修改路径名/移动文件夹。
 
 ### 关于翻译服务
 
@@ -660,9 +728,8 @@ source ~/.bashrc
 -   A：
     -   **原因说明**：为了保证PDF能够正常生成，当翻译失败时，程序会使用原文替代翻译后的位置，因此会出现部分段落未翻译的情况。
     -   **解决方法**：
-        1.  尝试更换翻译引擎（pdf2zh/pdf2zh_next）
-        2.  检查您的API是否超限（查看终端报错信息或API服务商后台）
-        3.  如果使用的是免费服务（如bing/google），可能是限流导致，建议切换到更稳定的服务
+        1.  检查您的 API 是否超限（查看终端报错信息或 API 服务商后台）
+        2.  如果使用的是免费服务（如 bing/google），可能是限流导致，建议切换到更稳定的服务
 
 
 ### 关于OCR/扫描件
@@ -683,7 +750,7 @@ source ~/.bashrc
 -   A：
     -   **扫描件问题**：如果文档本身是扫描件，必须先经过OCR处理后再进行翻译。若未进行OCR识别，会导致断行或段落缺失问题。
     -   **重影现象**：出现的重影通常是由于OCR识别不准确或PDF文件本身的问题导致的。建议使用高质量的OCR工具重新处理文档。
-    -   **段落缺失**：如前文所述，翻译失败时程序会用原文替代，建议先排查 API 服务是否正常。使用 pdf2zh_next 时，也可在 LLM 配置的额外参数里开启对应服务的 `*_enable_json_mode`（默认关闭），例如 `openai_enable_json_mode`、`deepseek_enable_json_mode`。
+    -   **段落缺失**：如前文所述，翻译失败时程序会用原文替代，建议先排查 API 服务是否正常。使用 pdf2zh_next 时，可展开 LLM 配置的「请求体」，按当前 API 协议填写支持的输出格式。已有配置中的 `*_enable_json_mode` 字段仍按原方式传递，默认关闭。
 
 ### 关于插件功能
 

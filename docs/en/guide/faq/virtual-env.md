@@ -10,7 +10,7 @@ Upgrade, then run `python update_packages.py --env-tool conda`. This release ins
 
 ## Can I skip virtual environment management?
 
-If you only use one engine (pdf2zh_next or pdf2zh) and have Python 3.12.0 globally, you can skip virtual environment management:
+If you have Python 3.12.0 globally, you can skip virtual environment management:
 
 ```shell
 pip install pdf2zh_next

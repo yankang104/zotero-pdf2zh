@@ -30,33 +30,6 @@ python update_packages.py --env-tool conda
 
 ---
 
-## subprocess.CalledProcessError 错误 🔥
-
-### 问题描述
-
-遇到类似 `Error: subprocess.CalledProcessError: Command ['zotero-pdf2zh-venv\\Scripts\\pdf2zh.exe'` 这样的错误。
-
-### 原因
-
-这类 `subprocess.CalledProcessError` 错误信息本身无法看出具体原因，仅表示子进程执行失败。
-
-### 解决方案
-
-1. **查看终端输出**
-   - 在运行 `python server.py` 的终端窗口中查看详细的错误日志
-   - 终端中会显示真正的错误原因
-
-2. **将终端输出发给 AI**
-   - 把终端中的详细错误信息复制发给 AI（如 ChatGPT、Claude、DeepSeek 等）
-   - 让 AI 帮您分析具体原因
-
-3. **常见原因包括**
-   - 虚拟环境路径问题
-   - 依赖包缺失
-   - Python 版本不兼容
-
----
-
 ## Failed to canonicalize script path 🔥
 
 ### 问题描述
@@ -73,7 +46,6 @@ python update_packages.py --env-tool conda
 
 1. 删除 `server` 路径下的虚拟环境文件夹：
    - `zotero-pdf2zh-next-venv`（pdf2zh_next 的虚拟环境）
-   - `zotero-pdf2zh-venv`（pdf2zh 的虚拟环境）
 
 2. 重新运行 `python server.py` 重新创建虚拟环境
 
@@ -91,7 +63,7 @@ python update_packages.py --env-tool conda
 
 ### 原因
 
-虚拟环境管理是推荐的安装方式，但不是必须的。如果您只使用 pdf2zh_next/pdf2zh 引擎中的一个，并且全局 Python 版本为 3.12.0，可以跳过虚拟环境管理。
+虚拟环境管理是推荐的安装方式，但不是必须的。如果全局 Python 版本为 3.12.0，可以跳过虚拟环境管理。
 
 ### 解决方案
 
@@ -111,9 +83,6 @@ cd server
 
 # 4. 安装执行包
 pip install -r requirements.txt
-# 如果只使用 pdf2zh:
-pip install pdf2zh==1.9.11 numpy==2.2.0
-# 如果只使用 pdf2zh_next:
 pip install pdf2zh_next
 # 或者（如果已经安装了 uv）
 uv tool install --python 3.12 pdf2zh-next
@@ -142,7 +111,6 @@ python server.py --enable_venv=False
 
 1. 删除 `server` 路径下的虚拟环境文件夹：
    - `zotero-pdf2zh-next-venv`（pdf2zh_next 的虚拟环境）
-   - `zotero-pdf2zh-venv`（pdf2zh 的虚拟环境）
 
 2. 重新运行 `python server.py` 重新创建虚拟环境
 
@@ -255,24 +223,18 @@ python update_packages.py
 
 ```shell
 conda activate zotero-pdf2zh-next-venv
-# 或 pdf2zh 对应的环境
-conda activate zotero-pdf2zh-venv
 ```
 
 **uv / macOS/Linux：**
 
 ```shell
 source ./zotero-pdf2zh-next-venv/bin/activate
-# 或 pdf2zh 对应的环境
-source ./zotero-pdf2zh-venv/bin/activate
 ```
 
 **uv / Windows：**
 
 ```shell
 .\zotero-pdf2zh-next-venv\Scripts\activate
-# 或 pdf2zh 对应的环境
-.\zotero-pdf2zh-venv\Scripts\activate
 ```
 
 然后只安装你真正需要改的包，例如：

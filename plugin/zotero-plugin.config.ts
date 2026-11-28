@@ -36,6 +36,12 @@ export default defineConfig({
         ],
     },
 
+    // Tagged CI publishes the canonical root artifacts and update manifests.
+    // Local release keeps the scaffold's version/tag workflow.
+    release: {
+        github: { enable: false },
+    },
+
     // If you need to see a more detailed log, uncomment the following line:
     // logLevel: "trace",
 });

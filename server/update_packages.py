@@ -14,7 +14,8 @@ from __future__ import annotations
 
 import argparse
 
-from utils.environment_lifecycle import ENGINE_ENV_NAMES, transactional_install_or_update
+from pdf2zh_server.environment.discovery import ENGINE_ENV_NAMES
+from pdf2zh_server.environment.install import transactional_install_or_update
 
 
 def main() -> int:
@@ -23,9 +24,9 @@ def main() -> int:
     )
     parser.add_argument(
         "--engine",
-        choices=[*ENGINE_ENV_NAMES, "all"],
+        choices=["pdf2zh_next", "wenyi"],
         default="pdf2zh_next",
-        help="默认更新 pdf2zh_next；也可指定 pdf2zh、wenyi 或 all。",
+        help="更新所选翻译引擎的托管环境。",
     )
     parser.add_argument(
         "--env-tool",
@@ -49,7 +50,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    engines = list(ENGINE_ENV_NAMES) if args.engine == "all" else [args.engine]
+    engines = [args.engine]
     all_ok = True
     for engine in engines:
         print("\n" + "=" * 68)

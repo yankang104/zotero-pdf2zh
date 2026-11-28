@@ -1,0 +1,314 @@
+:root {
+    color-scheme: light dark;
+    --editor-background: light-dark(#fff, #202124);
+    --editor-text: light-dark(#25282b, #e4e7eb);
+    --editor-muted: light-dark(#626972, #b2bac5);
+    --editor-border: light-dark(#d9dde3, #4e555e);
+    --editor-field: light-dark(#fff, #292d33);
+    --editor-automatic: light-dark(#f4f5f7, #30353b);
+    --editor-action: light-dark(#287cbc, #78b7ea);
+    --editor-action-text: light-dark(#fff, #10273a);
+}
+
+* {
+    box-sizing: border-box;
+}
+[hidden] {
+    display: none !important;
+}
+body {
+    margin: 0;
+    color: var(--editor-text);
+    background: var(--editor-background);
+    font:
+        14px/1.5 "Segoe UI",
+        "Microsoft YaHei",
+        sans-serif;
+}
+.form-container {
+    max-width: 640px;
+    margin: auto;
+    padding: 24px;
+}
+h2 {
+    margin: 0 0 22px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.form-group {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+input,
+select,
+textarea,
+button {
+    min-height: 36px;
+    min-width: 0;
+    padding: 7px 10px;
+    border: 1px solid var(--editor-border);
+    border-radius: 4px;
+    color: var(--editor-text);
+    background: var(--editor-field);
+    font: inherit;
+}
+input,
+textarea {
+    width: 100%;
+}
+input::placeholder {
+    color: var(--editor-muted);
+}
+input[readonly] {
+    background: var(--editor-automatic);
+    color: var(--editor-muted);
+}
+button {
+    white-space: nowrap;
+    cursor: pointer;
+}
+button:disabled {
+    color: var(--editor-muted);
+    cursor: default;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+    outline: 2px solid var(--editor-action);
+    outline-offset: 2px;
+}
+.editor-combobox {
+    position: relative;
+    min-width: 0;
+}
+.editor-combobox > input {
+    padding-right: 44px;
+}
+.editor-combobox::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    right: 37px;
+    bottom: 1px;
+    border-left: 1px solid var(--editor-border);
+    pointer-events: none;
+}
+.editor-combobox > select {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: calc(100% - 2px);
+    min-height: 0;
+    height: calc(100% - 2px);
+    padding: 0 10px 0 0;
+    border: 0;
+    border-radius: 0 3px 3px 0;
+    appearance: none;
+    clip-path: inset(0 0 0 calc(100% - 36px));
+    color: var(--editor-text);
+    background: var(--editor-field);
+    text-align: right;
+    text-align-last: right;
+    cursor: pointer;
+}
+.editor-combobox > select option {
+    color: var(--editor-text);
+    background: var(--editor-field);
+    text-align: left;
+}
+.model-row {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+}
+.model-row > .editor-combobox {
+    flex: 1;
+}
+#model-actions {
+    flex-shrink: 0;
+}
+.model-fetch-status,
+#editor-save-status {
+    margin: 0;
+    color: var(--editor-muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+.model-fetch-status {
+    grid-column: 2;
+}
+.model-fetch-status:empty,
+#editor-save-status:empty {
+    display: none;
+}
+#editor-save-status {
+    margin-top: 10px;
+    color: light-dark(#aa3434, #ffa1a1);
+}
+.request-section {
+    margin-top: 8px;
+    border-top: 1px solid var(--editor-border);
+}
+.request-section > summary {
+    padding: 11px 0;
+    cursor: pointer;
+}
+#request-headers-fields {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+.request-headers-editor,
+.llm-request-body-editor {
+    padding-bottom: 12px;
+}
+.request-header-toolbar,
+.body-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.request-header-toolbar select,
+.body-template {
+    max-width: 100%;
+}
+.request-header-row,
+.body-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 34px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.request-header-automatic,
+.request-header-columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    padding-right: 42px;
+}
+.request-header-columns,
+.body-table thead {
+    color: var(--editor-muted);
+    font-size: 12px;
+}
+.request-header-row button,
+.body-delete {
+    padding: 5px;
+}
+.body-table {
+    width: 100%;
+    border-spacing: 0 8px;
+    table-layout: fixed;
+}
+.body-table th {
+    text-align: left;
+    font-weight: 400;
+}
+.body-table td,
+.body-table th {
+    padding: 0;
+}
+.body-key-column {
+    width: 40%;
+}
+.body-key-column,
+.body-key-cell,
+.body-value-column,
+.body-value-cell {
+    padding-right: 8px !important;
+}
+.body-delete-column {
+    width: 34px;
+}
+.body-table .body-row {
+    display: table-row;
+}
+.body-table .body-value {
+    width: 100%;
+}
+.body-table textarea {
+    resize: vertical;
+    min-height: 36px;
+}
+.body-delete {
+    width: 34px;
+}
+.model-fetch-status.error {
+    color: light-dark(#aa3434, #ffa1a1);
+}
+.request-headers-editor > button,
+.body-add,
+.translation-parameter-add {
+    border: 0;
+    padding-left: 0;
+    color: var(--editor-action);
+    background: transparent;
+}
+.translation-parameter-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 0 8px;
+}
+.translation-parameter-toolbar h3 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 500;
+}
+.extra-field-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 34px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.extra-field-row > select {
+    width: 100%;
+}
+.extra-field-row > button {
+    padding: 5px;
+}
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--editor-border);
+    margin-top: 10px;
+    padding-top: 16px;
+}
+.btn-primary {
+    background: var(--editor-action);
+    border-color: var(--editor-action);
+    color: var(--editor-action-text);
+}
+@media (max-width: 420px) {
+    .form-container {
+        padding: 16px;
+    }
+    .form-group {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+    }
+    .model-row {
+        flex-wrap: wrap;
+    }
+    .model-row > .editor-combobox {
+        flex-basis: 100%;
+    }
+    #model-actions {
+        margin-left: auto;
+    }
+    .model-fetch-status {
+        grid-column: 1;
+    }
+}

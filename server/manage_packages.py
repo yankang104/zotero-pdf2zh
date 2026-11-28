@@ -13,18 +13,23 @@ from __future__ import annotations
 import argparse
 
 from packaging.specifiers import SpecifierSet
-
-from utils.environment_lifecycle import ENGINE_ENV_NAMES
-from utils.environment_lifecycle import PRIMARY_PACKAGES
-from utils.environment_lifecycle import find_existing_environment
-from utils.environment_lifecycle import format_versions
-from utils.environment_lifecycle import managed_runtime_health
-from utils.environment_lifecycle import read_versions
-from utils.environment_lifecycle import server_version_from_source
-from utils.environment_lifecycle import transactional_install_or_update
-from utils.package_network import print_probe_report
-from utils.package_network import probe_indexes
-from utils.package_network import usable_indexes
+from pdf2zh_server.environment.discovery import (
+    ENGINE_ENV_NAMES,
+    PRIMARY_PACKAGES,
+    find_existing_environment,
+    format_versions,
+    read_versions,
+)
+from pdf2zh_server.environment.install import (
+    managed_runtime_health,
+    transactional_install_or_update,
+)
+from pdf2zh_server.environment.network import (
+    print_probe_report,
+    probe_indexes,
+    usable_indexes,
+)
+from pdf2zh_server.environment.updates import server_version_from_source
 
 
 def _engines(value: str) -> list[str]:
@@ -66,7 +71,9 @@ def doctor(engine: str, env_tool: str) -> bool:
         return False
 
     if len(candidates) > 1:
-        print("⚠️ 检测到多个环境；将分别检查。实际运行环境以 Server 翻译命令中的路径为准。")
+        print(
+            "⚠️ 检测到多个环境；将分别检查。实际运行环境以 Server 翻译命令中的路径为准。"
+        )
 
     all_healthy = True
     for tool, env_dir, python_path in candidates:
@@ -85,9 +92,7 @@ def doctor(engine: str, env_tool: str) -> bool:
         compatible = True
         if engine == "pdf2zh_next":
             version = versions.get("bitstring")
-            compatible = bool(
-                version and SpecifierSet(">=4.3.0,<5").contains(version)
-            )
+            compatible = bool(version and SpecifierSet(">=4.3.0,<5").contains(version))
             if compatible:
                 print(f"✅ bitstring {version} 满足 >=4.3.0,<5")
             else:
@@ -97,10 +102,8 @@ def doctor(engine: str, env_tool: str) -> bool:
         if healthy:
             if engine == "pdf2zh_next":
                 print("✅ 运行时依赖检查通过（包括 bitstring.BitStream 导入与构造）")
-            elif engine == "wenyi":
-                print("ℹ️ Wenyi 不运行额外运行时检查；启动错误由 CLI/bridge 报告。")
             else:
-                print("✅ 旧引擎基本环境检查通过（未运行 Next 专用 BitStream 探测）")
+                print(f"✅ {engine} 依赖检查通过")
         else:
             print(f"❌ 运行时依赖检查失败: {reason}")
 
@@ -137,14 +140,10 @@ def update(
         except Exception:
             pass
     else:
-        print(
-            f"\n[{engine}] 未找到 {env_tool} 环境，将按首次安装流程创建。"
-        )
+        print(f"\n[{engine}] 未找到 {env_tool} 环境，将按首次安装流程创建。")
 
     if not assume_yes:
-        print(
-            "更新会在当前翻译环境中直接安装依赖，不再创建 staging 或 backup 环境。\n"
-        )
+        print("更新会在当前翻译环境中直接安装依赖，不再创建 staging 或 backup 环境。\n")
         try:
             answer = input("确认开始安全更新？(y/N): ").strip().lower()
         except (EOFError, KeyboardInterrupt):
@@ -170,7 +169,7 @@ def main() -> int:
     parser.add_argument("action", choices=["network", "status", "doctor", "update"])
     parser.add_argument(
         "--engine",
-        choices=[*ENGINE_ENV_NAMES, "all"],
+        choices=["pdf2zh_next", "wenyi", "all"],
         default="pdf2zh_next",
     )
     parser.add_argument(

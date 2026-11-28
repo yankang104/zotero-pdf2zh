@@ -27,3 +27,15 @@ export function setPref(key: string, value: string | number | boolean) {
 export function clearPref(key: string) {
     return Zotero.Prefs.clear(`${config.prefsPrefix}.${key}`, true);
 }
+
+export function isTrue(value: string | number | boolean | undefined): boolean {
+    if (value == undefined) return false;
+    return (
+        value == true ||
+        value == "true" ||
+        value == "1" ||
+        value == "True" ||
+        value == "TRUE" ||
+        value == 1
+    );
+}

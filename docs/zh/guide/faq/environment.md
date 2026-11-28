@@ -20,8 +20,6 @@
 
 进入对应的虚拟环境，将 onnx 包降级到 `1.16.1` 版本。
 
-**pdf2zh 对应的虚拟环境名为 `zotero-pdf2zh-venv`**
-
 **pdf2zh_next 对应的虚拟环境名为 `zotero-pdf2zh-next-venv`**
 
 #### 使用 conda

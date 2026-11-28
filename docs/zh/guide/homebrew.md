@@ -1,6 +1,6 @@
-# Homebrew 部署
+# Homebrew 部署 PDF2zh Next
 
-使用 Homebrew 在 macOS/Linux 上部署 Zotero PDF2zh 服务。
+使用社区维护的 Homebrew Tap 安装 PDF2zh Next 独立服务。
 
 ::: tip Homebrew 优势
 - 包管理自动化，安装和更新更方便
@@ -40,14 +40,12 @@ brew --version
 
 ## 安装服务
 
-```bash
-brew install zotero-pdf2zh-server
-```
+Tap 及 Next 配方信息见 [NightWatcher314/homebrew-formula](https://github.com/NightWatcher314/homebrew-formula)：
 
-此命令会自动：
-- 安装 Python 依赖
-- 配置服务环境
-- 设置可执行命令
+```bash
+brew tap NightWatcher314/homebrew-formula
+brew install zotero-pdf2zh-next
+```
 
 ---
 
@@ -58,20 +56,20 @@ brew install zotero-pdf2zh-server
 ### 方式一：直接命令启动
 
 ```bash
-zotero-pdf2zh-server
+zotero-pdf2zh-next
 ```
 
 ### 方式二：作为服务启动
 
 ```bash
 # 启动服务
-brew services start zotero-pdf2zh-server
+brew services start zotero-pdf2zh-next
 
 # 查看服务状态
 brew services list
 
 # 停止服务
-brew services stop zotero-pdf2zh-server
+brew services stop zotero-pdf2zh-next
 ```
 
 服务默认运行在 `http://127.0.0.1:8890`
@@ -83,7 +81,7 @@ brew services stop zotero-pdf2zh-server
 如果需要修改端口：
 
 ```bash
-zotero-pdf2zh-server --port=9999
+zotero-pdf2zh-next --port=9999
 ```
 
 ---
@@ -92,10 +90,10 @@ zotero-pdf2zh-server --port=9999
 
 ```bash
 # 实时查看日志
-brew services log zotero-pdf2zh-server --tail -f
+brew services log zotero-pdf2zh-next --tail -f
 
 # 查看所有日志
-brew services log zotero-pdf2zh-server
+brew services log zotero-pdf2zh-next
 ```
 
 ---
@@ -103,7 +101,7 @@ brew services log zotero-pdf2zh-server
 ## 更新服务
 
 ```bash
-brew upgrade zotero-pdf2zh-server
+brew upgrade zotero-pdf2zh-next
 ```
 
 ---
@@ -112,13 +110,13 @@ brew upgrade zotero-pdf2zh-server
 
 ```bash
 # 停止服务
-brew services stop zotero-pdf2zh-server
+brew services stop zotero-pdf2zh-next
 
 # 卸载
-brew uninstall zotero-pdf2zh-server
+brew uninstall zotero-pdf2zh-next
 
 # 清理配置（可选）
-rm -rf ~/Library/Application\ Support/zotero-pdf2zh-server
+rm -rf ~/Library/Application\ Support/zotero-pdf2zh-next
 ```
 
 ---
@@ -129,7 +127,7 @@ rm -rf ~/Library/Application\ Support/zotero-pdf2zh-server
 
 2. 设置 **Python Server IP**: `http://127.0.0.1:8890`
 
-3. 选择 **翻译引擎**: `pdf2zh` 或 `pdf2zh_next`
+3. PDF 翻译使用 `pdf2zh_next`。
 
 4. 配置 **LLM API**（详见 [配置说明](/zh/guide/configuration)）
 
@@ -137,7 +135,7 @@ rm -rf ~/Library/Application\ Support/zotero-pdf2zh-server
 
 ## 项目信息
 
-- **仓库地址**: [NightWatcher314/zotero-pdf2zh-server](https://github.com/NightWatcher314/zotero-pdf2zh-server)
+- **Tap 仓库**: [NightWatcher314/homebrew-formula](https://github.com/NightWatcher314/homebrew-formula)
 - **贡献者**: [@NightWatcher314](https://github.com/NightWatcher314)
 
 ---
@@ -158,7 +156,7 @@ rm -rf ~/Library/Application\ Support/zotero-pdf2zh-server
 
 ```bash
 # 查看详细日志
-brew services log zotero-pdf2zh-server --tail -f
+brew services log zotero-pdf2zh-next --tail -f
 ```
 
 ### 端口被占用
@@ -168,14 +166,14 @@ brew services log zotero-pdf2zh-server --tail -f
 lsof -i :8890
 
 # 使用其他端口启动
-zotero-pdf2zh-server --port=9999
+zotero-pdf2zh-next --port=9999
 ```
 
 ### 依赖问题
 
 ```bash
 # 重新安装
-brew reinstall zotero-pdf2zh-server
+brew reinstall zotero-pdf2zh-next
 ```
 
 ---

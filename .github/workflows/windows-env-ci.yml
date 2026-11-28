@@ -34,8 +34,8 @@ jobs:
                   from pathlib import Path
                   from unittest.mock import patch
 
-                  from utils import environment_lifecycle as lifecycle
-                  from utils.venv import VirtualEnvManager
+                  from pdf2zh_server.environment import discovery as lifecycle
+                  from pdf2zh_server.environment.manager import VirtualEnvManager
 
                   assert lifecycle.platform.system() == 'Windows'
 
@@ -71,7 +71,6 @@ jobs:
                       assert existing == ('conda', conda_dir, conda_python)
 
                       names = {
-                          'pdf2zh': 'zotero-pdf2zh-venv',
                           'pdf2zh_next': 'zotero-pdf2zh-next-venv',
                       }
                       manager = VirtualEnvManager('missing.json', names, 'conda', skip_install=True)
@@ -93,7 +92,7 @@ jobs:
               shell: pwsh
               env:
                   PYTHONPATH: server
-              run: python -c "import sys; from pathlib import Path; from utils.environment_lifecycle import managed_runtime_health; ok, reason = managed_runtime_health('pdf2zh_next', Path(sys.executable)); print(reason); assert ok, reason"
+              run: python -c "import sys; from pathlib import Path; from pdf2zh_server.environment.install import managed_runtime_health; ok, reason = managed_runtime_health('pdf2zh_next', Path(sys.executable)); print(reason); assert ok, reason"
 
             - name: Test Server
               shell: pwsh

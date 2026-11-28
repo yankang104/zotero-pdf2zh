@@ -3,13 +3,12 @@ startup-finish = Addon is ready
 
 prefs-title = PDF2zh
 
-prefs-menu-translate = Translate PDF
+prefs-menu-translate = Translate
 prefs-menu-cut = Cut PDF
 prefs-menu-crop-compare = Bilingual PDF(After Cropping)
 prefs-menu-compare = Bilingual PDF
 prefs-menu-translate-mono = Translation only
-prefs-menu-translate-dual-lr = Bilingual (side by side)
-prefs-menu-translate-dual-tb = Bilingual (alternating pages)
+prefs-menu-translate-dual-lr = Bilingual
 
 operation-progress-title = PDF2zh
 operation-progress-processing = Preparing request...
@@ -52,3 +51,4 @@ operation-error-completed-no-files = The task completed, but the Server returned
 operation-table-native-fallback = This Server does not support Prettier tables. Using native table translation for now; your setting stays enabled and takes effect automatically after a Server upgrade.
 operation-error-partial-attachments = Imported only { $attached }/{ $total } attachment(s): { $message }
 operation-reference-native-fallback = This Server does not support Reference Skip. Using native translation until the Server is updated.
+operation-error-relay-server = This Server does not support the updated custom relay protocol. Update the matching Server and try again; no PDF translation job was submitted.

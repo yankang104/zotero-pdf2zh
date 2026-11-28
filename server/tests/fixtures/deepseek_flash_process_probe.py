@@ -6,7 +6,7 @@ import os
 import sys
 from types import ModuleType
 
-from utils import table_process
+import pdf2zh_server.engines.next_runtime.process_policy as table_process
 
 STATE = {"flash_hooks": 0}
 
@@ -36,9 +36,7 @@ table_process.install_deepseek_flash_patch = install_flash
 def main():
     ctx = multiprocessing.get_context(sys.argv[1])
     queue = ctx.Queue()
-    restore = table_process.install_table_process_policy(
-        None, flash_patch=True
-    )
+    restore = table_process.install_table_process_policy(None, flash_patch=True)
     try:
         child = ctx.Process(target=engine._translate_wrapper, args=(queue,))
         child.start()
