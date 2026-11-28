@@ -3,9 +3,9 @@
     "pdf2zh@guaguastandup.com": {
       "updates": [
         {
-          "version": "4.1.9-beta.6",
-          "update_link": "https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.6/zotero-pdf-2-zh.xpi",
-          "update_hash": "sha512:e9cabf6b95cdc49be2f4d78e28445b5d9f6078896cbf54598faa9adf1e73a90516db8e99a7f37d029b699166c2aab3a156923e7c7382ed7fbe98167a5cb4467b",
+          "version": "4.1.9-beta.7",
+          "update_link": "https://github.com/yankang104/zotero-pdf2zh/releases/download/v4.1.9-beta.7/zotero-pdf-2-zh.xpi",
+          "update_hash": "sha512:d8af2fb8e4877a983d56a214cc0f2d66c131e1ccf496151227b3958be7261345215e2f38367bcfb7f5a989750e1a6739d92a5f35cfd77806e0a5240c86f88852",
           "applications": {
             "zotero": {
               "strict_min_version": "6.999",
